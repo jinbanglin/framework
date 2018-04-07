@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"moss/conn"
-	"moss/metrics/generic"
+	"github.com/jinbanglin/moss/conn"
+	"github.com/jinbanglin/moss/metrics/generic"
 )
 
 // Graphite receives metrics observations and forwards them to a Graphite server.

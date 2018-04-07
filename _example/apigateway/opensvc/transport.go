@@ -7,16 +7,16 @@ import (
 	"net/http"
 	"strconv"
 
-	"moss/_example/pb"
-	"moss/auth/moss_jwt"
-	"moss/kernel/addtransport"
-	"moss/kernel/payload"
-	mosshttp "moss/transport/http"
+	"github.com/jinbanglin/moss/_example/pb"
+	"github.com/jinbanglin/moss/auth/moss_jwt"
+	"github.com/jinbanglin/moss/kernel/addtransport"
+	"github.com/jinbanglin/moss/kernel/payload"
+	mosshttp "github.com/jinbanglin/moss/transport/http"
 
 	"github.com/json-iterator/go"
 	"github.com/spf13/viper"
 
-	"moss/log"
+	"github.com/jinbanglin/moss/log"
 
 	"github.com/gorilla/mux"
 )

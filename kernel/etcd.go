@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"moss/discovery/etcdv3"
+	"github.com/jinbanglin/moss/discovery/etcdv3"
 )
 
 func NewEtcdV3Client() etcdv3.Client {

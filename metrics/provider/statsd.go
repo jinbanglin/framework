@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"moss/metrics"
-	"moss/metrics/statsd"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/statsd"
 )
 
 type statsdProvider struct {

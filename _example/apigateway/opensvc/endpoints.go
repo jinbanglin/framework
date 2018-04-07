@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"moss"
-	"moss/kernel/payload"
+	"github.com/jinbanglin/moss/kernel/payload"
 )
 
 type Endpoints struct {

@@ -10,8 +10,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"moss/metrics"
-	"moss/metrics/internal/lv"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/internal/lv"
 
 	"github.com/VividCortex/gohistogram"
 )

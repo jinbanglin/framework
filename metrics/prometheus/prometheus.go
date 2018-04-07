@@ -5,8 +5,8 @@
 package prometheus
 
 import (
-	"moss/metrics"
-	"moss/metrics/internal/lv"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/internal/lv"
 
 	"github.com/prometheus/client_golang/prometheus"
 )

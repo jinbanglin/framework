@@ -2,9 +2,9 @@ package kernel
 
 import (
 	"moss"
-	"moss/kernel/addtransport"
-	"moss/log"
-	"moss/transport/grpc"
+	"github.com/jinbanglin/moss/kernel/addtransport"
+	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/moss/transport/grpc"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/opentracing/opentracing-go"

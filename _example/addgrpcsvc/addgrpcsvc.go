@@ -3,11 +3,11 @@ package main
 import (
 	"time"
 
-	"moss/_example"
-	"moss/_example/addgrpcsvc/hello_moss"
-	"moss/_example/addgrpcsvc/register"
-	"moss/_example/pb"
-	"moss/kernel"
+	"github.com/jinbanglin/moss/_example"
+	"github.com/jinbanglin/moss/_example/addgrpcsvc/hello_moss"
+	"github.com/jinbanglin/moss/_example/addgrpcsvc/register"
+	"github.com/jinbanglin/moss/_example/pb"
+	"github.com/jinbanglin/moss/kernel"
 )
 
 func main() {

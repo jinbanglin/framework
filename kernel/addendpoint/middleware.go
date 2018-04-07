@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"moss"
-	"moss/log"
-	"moss/metrics"
+	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/moss/metrics"
 )
 
 func InstrumentingMiddleware(duration metrics.Histogram) moss.Middleware {

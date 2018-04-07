@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"moss/kernel/payload"
-	"moss/log"
-	"moss/metrics"
+	"github.com/jinbanglin/moss/kernel/payload"
+	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/moss/metrics"
 )
 
 type Middleware func(Service) Service

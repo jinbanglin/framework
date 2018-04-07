@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
-	mosshttp "moss/transport/http"
+	mosshttp "github.com/jinbanglin/moss/transport/http"
 
-	"moss/log"
+	"github.com/jinbanglin/moss/log"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"

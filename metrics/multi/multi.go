@@ -4,7 +4,7 @@
 // transitioning from one system to another.
 package multi
 
-import "moss/metrics"
+import "github.com/jinbanglin/moss/metrics"
 
 // Counter collects multiple individual counters and treats them as a unit.
 type Counter []metrics.Counter

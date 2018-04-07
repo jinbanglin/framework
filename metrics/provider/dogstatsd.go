@@ -1,7 +1,7 @@
 package provider
 
 import (
-	"moss/metrics/dogstatsd"
+	"github.com/jinbanglin/moss/metrics/dogstatsd"
 )
 
 type dogstatsdProvider struct {

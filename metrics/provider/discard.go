@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"moss/metrics"
-	"moss/metrics/discard"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/discard"
 )
 
 type discardProvider struct{}

@@ -7,18 +7,18 @@ import (
 	"net/http"
 	"strconv"
 
-	"moss/kernel/addendpoint"
-	"moss/kernel/payload"
-	"moss/log"
-	"moss/tracing"
-	httptransport "moss/transport/http"
+	"github.com/jinbanglin/moss/kernel/addendpoint"
+	"github.com/jinbanglin/moss/kernel/payload"
+	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/moss/tracing"
+	httptransport "github.com/jinbanglin/moss/transport/http"
 
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gorilla/mux"
 	"github.com/json-iterator/go"
 	"github.com/opentracing/opentracing-go"
-	"moss/auth/moss_jwt"
+	"github.com/jinbanglin/moss/auth/moss_jwt"
 )
 
 type MutilEndpoints struct {

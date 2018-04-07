@@ -5,8 +5,8 @@ import (
 	"net"
 	"time"
 
-	"moss/discovery"
-	"moss/log"
+	"github.com/jinbanglin/moss/discovery"
+	"github.com/jinbanglin/moss/log"
 )
 
 // Instancer yields instances from the named DNS SRV record. The name is

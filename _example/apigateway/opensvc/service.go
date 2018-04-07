@@ -1,9 +1,9 @@
 package opensvc
 
 import (
-	"moss/_example"
-	"moss/kernel"
-	"moss/kernel/payload"
+	"github.com/jinbanglin/moss/_example"
+	"github.com/jinbanglin/moss/kernel"
+	"github.com/jinbanglin/moss/kernel/payload"
 
 	"context"
 )

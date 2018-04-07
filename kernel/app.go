@@ -7,9 +7,9 @@ import (
 	"syscall"
 	"time"
 
-	"moss/discovery/etcdv3"
-	"moss/kernel/payload"
-	"moss/log"
+	"github.com/jinbanglin/moss/discovery/etcdv3"
+	"github.com/jinbanglin/moss/kernel/payload"
+	"github.com/jinbanglin/moss/log"
 
 	"github.com/gorilla/mux"
 	"google.golang.org/grpc/reflection"

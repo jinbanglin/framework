@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"moss/log"
+	"github.com/jinbanglin/moss/log"
 )
 
 // Dialer imitates net.Dial. Dialer is assumed to yield connections that are

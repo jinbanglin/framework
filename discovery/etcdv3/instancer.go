@@ -1,8 +1,8 @@
 package etcdv3
 
 import (
-	"moss/discovery"
-	"moss/log"
+	"github.com/jinbanglin/moss/discovery"
+	"github.com/jinbanglin/moss/log"
 )
 
 // Instancer yields instances stored in a certain etcd keyspace. Any kind of

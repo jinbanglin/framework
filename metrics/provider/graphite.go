@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"moss/metrics"
-	"moss/metrics/graphite"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/graphite"
 )
 
 type graphiteProvider struct {

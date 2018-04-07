@@ -1,8 +1,8 @@
 package register
 
 import (
-	"moss/_example/pb"
-	"moss/log"
+	"github.com/jinbanglin/moss/_example/pb"
+	"github.com/jinbanglin/moss/log"
 
 	"golang.org/x/net/context"
 )

@@ -1,7 +1,7 @@
 // Package discard provides a no-op metrics backend.
 package discard
 
-import "moss/metrics"
+import "github.com/jinbanglin/moss/metrics"
 
 type counter struct{}
 

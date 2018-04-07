@@ -2,7 +2,7 @@
 // as one of the other types
 package convert
 
-import "moss/metrics"
+import "github.com/jinbanglin/moss/metrics"
 
 type counterHistogram struct {
 	c metrics.Counter

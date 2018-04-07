@@ -24,7 +24,7 @@
 package provider
 
 import (
-	"moss/metrics"
+	"github.com/jinbanglin/moss/metrics"
 )
 
 // Provider abstracts over constructors and lifecycle management functions for

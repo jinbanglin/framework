@@ -3,8 +3,8 @@ package addservice
 import (
 	"errors"
 
-	"moss/kernel/payload"
-	"moss/metrics"
+	"github.com/jinbanglin/moss/kernel/payload"
+	"github.com/jinbanglin/moss/metrics"
 
 	"golang.org/x/net/context"
 )

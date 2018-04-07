@@ -1,7 +1,7 @@
 package pcp
 
 import (
-	"moss/metrics"
+	"github.com/jinbanglin/moss/metrics"
 
 	"github.com/performancecopilot/speed"
 )

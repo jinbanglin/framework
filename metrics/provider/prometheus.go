@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"moss/metrics"
-	"moss/metrics/prometheus"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/prometheus"
 
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 )

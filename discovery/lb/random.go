@@ -4,7 +4,7 @@ import (
 	"math/rand"
 
 	"moss"
-	"moss/discovery"
+	"github.com/jinbanglin/moss/discovery"
 )
 
 // NewRandom returns a load balancer that selects services randomly.

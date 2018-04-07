@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"moss"
-	"moss/log"
+	"github.com/jinbanglin/moss/log"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"

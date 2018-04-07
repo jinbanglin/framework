@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"moss/log"
+	"github.com/jinbanglin/moss/log"
 )
 
 //func main() {

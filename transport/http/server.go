@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"moss"
-	"moss/log"
+	"github.com/jinbanglin/moss/log"
 )
 
 // Server wraps an endpoint and implements http.Handler.

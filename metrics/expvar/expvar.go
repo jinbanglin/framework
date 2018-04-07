@@ -6,8 +6,8 @@ import (
 	"expvar"
 	"sync"
 
-	"moss/metrics"
-	"moss/metrics/generic"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/generic"
 )
 
 // Counter implements the counter metric with an expvar float.

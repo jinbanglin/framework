@@ -13,10 +13,10 @@ import (
 	"io"
 	"time"
 
-	"moss/conn"
-	"moss/metrics"
-	"moss/metrics/internal/lv"
-	"moss/metrics/internal/ratemap"
+	"github.com/jinbanglin/moss/conn"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/internal/lv"
+	"github.com/jinbanglin/moss/metrics/internal/ratemap"
 )
 
 // Statsd receives metrics observations and forwards them to a StatsD server.

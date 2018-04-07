@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"strings"
 
-	"moss/log"
+	"github.com/jinbanglin/moss/log"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"

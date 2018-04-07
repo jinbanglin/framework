@@ -1,7 +1,7 @@
 package hello_moss
 
 import (
-	"moss/_example/pb"
+	"github.com/jinbanglin/moss/_example/pb"
 
 	"golang.org/x/net/context"
 )

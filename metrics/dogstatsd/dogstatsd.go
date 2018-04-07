@@ -18,10 +18,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"moss/metrics"
-	"moss/metrics/generic"
-	"moss/metrics/internal/lv"
-	"moss/metrics/internal/ratemap"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/generic"
+	"github.com/jinbanglin/moss/metrics/internal/lv"
+	"github.com/jinbanglin/moss/metrics/internal/ratemap"
 )
 
 // Dogstatsd receives metrics observations and forwards them to a DogStatsD

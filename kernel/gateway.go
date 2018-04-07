@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"moss/kernel/addendpoint"
-	"moss/kernel/addtransport"
+	"github.com/jinbanglin/moss/kernel/addendpoint"
+	"github.com/jinbanglin/moss/kernel/addtransport"
 
 	"github.com/gorilla/mux"
 	"github.com/opentracing/opentracing-go"

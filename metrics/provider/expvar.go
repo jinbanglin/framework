@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"moss/metrics"
-	"moss/metrics/expvar"
+	"github.com/jinbanglin/moss/metrics"
+	"github.com/jinbanglin/moss/metrics/expvar"
 )
 
 type expvarProvider struct{}

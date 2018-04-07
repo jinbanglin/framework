@@ -6,13 +6,13 @@ import (
 	"time"
 
 	"moss"
-	"moss/discovery"
-	"moss/discovery/etcdv3"
-	"moss/discovery/lb"
-	"moss/kernel/addendpoint"
-	"moss/kernel/addtransport"
-	"moss/kernel/payload"
-	"moss/log"
+	"github.com/jinbanglin/moss/discovery"
+	"github.com/jinbanglin/moss/discovery/etcdv3"
+	"github.com/jinbanglin/moss/discovery/lb"
+	"github.com/jinbanglin/moss/kernel/addendpoint"
+	"github.com/jinbanglin/moss/kernel/addtransport"
+	"github.com/jinbanglin/moss/kernel/payload"
+	"github.com/jinbanglin/moss/log"
 
 	"github.com/opentracing/opentracing-go"
 

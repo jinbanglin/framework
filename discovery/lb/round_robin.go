@@ -4,7 +4,7 @@ import (
 	"sync/atomic"
 
 	"moss"
-	"moss/discovery"
+	"github.com/jinbanglin/moss/discovery"
 )
 
 // NewRoundRobin returns a load balancer that returns services in sequence.

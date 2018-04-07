@@ -3,9 +3,9 @@ package main
 import (
 	"time"
 
-	"moss/_example"
-	"moss/_example/apigateway/opensvc"
-	"moss/kernel"
+	"github.com/jinbanglin/moss/_example"
+	"github.com/jinbanglin/moss/_example/apigateway/opensvc"
+	"github.com/jinbanglin/moss/kernel"
 )
 
 func main() {
