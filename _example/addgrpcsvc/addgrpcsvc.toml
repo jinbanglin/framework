@@ -1,0 +1,12 @@
+[server]
+mode    ="dev"
+version ="v0.1"
+
+[etcdv3]
+etcd_endpoints =["127.0.0.1:2379"]
+etcd_group     ="/dev"
+server_id ="1"
+
+[[connection]]
+conn_type ="GRPC"
+addr ="127.0.0.1:10000"

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package payload;
+
+service Invoking {
+    rpc Invoking (MossPacket) returns (MossPacket) {
+    }
+}
+
+message MossPacket {
+    uint32 service_code = 1; // communicate by protocol
+    bytes payload = 2; // payload json or protobuf
+    Message message = 3;
+    string user_id=4;
+    string client_ip=5;
+}
+
+message Message {
+    uint32 code = 1;
+    string msg = 2;
+}
