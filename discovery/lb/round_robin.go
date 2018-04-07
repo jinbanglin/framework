@@ -3,7 +3,7 @@ package lb
 import (
 	"sync/atomic"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery"
 )
 

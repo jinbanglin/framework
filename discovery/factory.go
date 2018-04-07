@@ -3,7 +3,7 @@ package discovery
 import (
 	"io"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 )
 
 // Factory is a function that converts an instance string (e.g. host:port) to a

@@ -3,7 +3,7 @@ package opensvc
 import (
 	"context"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/kernel/payload"
 )
 

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"

@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 )
 
 // Client wraps a URL and provides a method that implements moss.Endpoint.

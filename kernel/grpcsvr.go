@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/kernel/addtransport"
 	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/transport/grpc"

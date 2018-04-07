@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/circuitbreaker"
 	"github.com/jinbanglin/moss/kernel/addservice"
 	"github.com/jinbanglin/moss/kernel/payload"

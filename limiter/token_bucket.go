@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 )
 
 // ErrLimited is returned in the request path when the rate limiter is

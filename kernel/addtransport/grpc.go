@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/circuitbreaker"
 	"github.com/jinbanglin/moss/kernel/addendpoint"
 	"github.com/jinbanglin/moss/kernel/addservice"

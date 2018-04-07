@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery"
 	"github.com/jinbanglin/moss/discovery/etcdv3"
 	"github.com/jinbanglin/moss/discovery/lb"

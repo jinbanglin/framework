@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 
 	"github.com/streadway/handy/breaker"
 )

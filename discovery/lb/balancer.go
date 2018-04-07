@@ -3,7 +3,7 @@ package lb
 import (
 	"errors"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 )
 
 // Balancer yields endpoints according to some heuristic.

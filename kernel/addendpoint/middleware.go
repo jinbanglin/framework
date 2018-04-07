@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/metrics"
 )

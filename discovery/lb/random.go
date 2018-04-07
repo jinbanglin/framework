@@ -3,7 +3,7 @@ package lb
 import (
 	"math/rand"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery"
 )
 

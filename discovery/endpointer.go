@@ -3,7 +3,7 @@ package discovery
 import (
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 )
 
 // Endpointer listens to a service discovery system and yields a set of

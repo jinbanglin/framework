@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 )
 
 // RetryError is an error wrapper that is used by the retry mechanism. All

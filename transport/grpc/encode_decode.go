@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"moss"
+	"github.com/jinbanglin/moss"
 )
 
 type decodeFunc moss.Endpoint

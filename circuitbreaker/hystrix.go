@@ -3,7 +3,7 @@ package circuitbreaker
 import (
 	"context"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 
 	"github.com/afex/hystrix-go/hystrix"
 )

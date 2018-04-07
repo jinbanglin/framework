@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/log"
 )
 

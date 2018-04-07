@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"moss"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/log"
 )
 
