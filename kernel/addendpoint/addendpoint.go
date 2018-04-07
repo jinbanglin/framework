@@ -2,7 +2,6 @@ package addendpoint
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/jinbanglin/moss"
