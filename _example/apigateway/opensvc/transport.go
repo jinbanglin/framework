@@ -74,7 +74,7 @@ func encodeRegisterResponse(_ context.Context, w http.ResponseWriter, response i
 	}
 	log.Info("encodeRegisterResponse |signedKey", signedKey)
 	w.Header().Set("Authorization", "Bearer "+signedKey)
-	return jsoniter.NewEncoder(w).Encode(res)
+	return jsoniter.NewEncoder(w).Encode(ret)
 }
 
 func encodeError(_ context.Context, err error, w http.ResponseWriter) {
