@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"context"
+	"golang.org/x/net/context"
 	"time"
 
 	"github.com/jinbanglin/moss/discovery/etcdv3"

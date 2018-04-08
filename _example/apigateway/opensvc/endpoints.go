@@ -1,7 +1,7 @@
 package opensvc
 
 import (
-	"context"
+	"golang.org/x/net/context"
 
 	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/kernel/payload"

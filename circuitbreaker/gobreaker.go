@@ -1,7 +1,7 @@
 package circuitbreaker
 
 import (
-	"context"
+	"golang.org/x/net/context"
 
 	"github.com/jinbanglin/moss"
 

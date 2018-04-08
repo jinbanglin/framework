@@ -1,7 +1,7 @@
 package etcdv3
 
 import (
-	"context"
+	"golang.org/x/net/context"
 	"crypto/tls"
 	"errors"
 	"time"

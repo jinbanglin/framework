@@ -1,7 +1,7 @@
 package tracing
 
 import (
-	"context"
+	"golang.org/x/net/context"
 	"net"
 	"net/http"
 	"strconv"

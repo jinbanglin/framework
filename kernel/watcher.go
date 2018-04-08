@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"context"
+	"golang.org/x/net/context"
 	"io"
 	"time"
 

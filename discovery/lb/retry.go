@@ -1,7 +1,7 @@
 package lb
 
 import (
-	"context"
+	"golang.org/x/net/context"
 	"fmt"
 	"strings"
 	"time"
