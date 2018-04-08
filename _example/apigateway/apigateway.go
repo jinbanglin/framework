@@ -12,7 +12,7 @@ func main() {
 	kernel.AppServer.SetupConfig(_example.Apigateway)
 	go kernel.AppServer.HttpGatewayStart(opensvc.MakeOpensvcHTTPHandler())
 	kernel.AppServer.Stop(10*time.Second, func() {
-		//TODO 资源释放函数
+		//TODO free
 	})
 	kernel.AppServer.Run()
 }

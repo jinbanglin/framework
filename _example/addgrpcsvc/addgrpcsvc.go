@@ -16,7 +16,7 @@ func main() {
 	kernel.GrpcInstance().RegisterProtoInvokeFunc(900003, &pb.RegisterReq{}, register.RegisterHandler)
 	kernel.AppServer.GrpcServerStart()
 	kernel.AppServer.Stop(10*time.Second, func() {
-		//TODO 资源释放函数
+		//TODO free
 	})
 	kernel.AppServer.Run()
 }

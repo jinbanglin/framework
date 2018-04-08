@@ -72,7 +72,6 @@ func NewGrpcServer(tracer opentracing.Tracer, ops []transportgrpc.ServerOption) 
 	return gScheduler
 }
 
-//todo 抽出来
 func NewHandler(endpoint moss.Endpoint, tracer opentracing.Tracer, ops []transportgrpc.ServerOption) transportgrpc.Handler {
 	service := addservice.NewService(gScheduler.metrics.Counters, gScheduler.metrics.SummaryError)
 	endpoint = addendpoint.NewEndpoint(service, gScheduler.metrics.SummarySuccess, opentracing.GlobalTracer()).InvokeEndpoint

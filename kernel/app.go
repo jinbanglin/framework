@@ -92,7 +92,7 @@ func (a *appServer) Stop(timeout time.Duration, f ...func()) {
 		for _, v := range f {
 			v()
 		}
-		//todo 系统资源释放
+		//todo free or else
 	}
 	RegisterContinueSignal(syscall.SIGTERM, process)
 	RegisterContinueSignal(syscall.SIGINT, process)
