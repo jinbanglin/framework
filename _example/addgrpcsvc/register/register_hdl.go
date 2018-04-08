@@ -4,7 +4,7 @@ import (
 	"github.com/jinbanglin/moss/_example/pb"
 	"github.com/jinbanglin/moss/log"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 func RegisterHandler(_ context.Context, request interface{}) (response interface{}, err error) {

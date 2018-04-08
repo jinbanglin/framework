@@ -4,7 +4,7 @@ import (
 	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/log"
 
-	"golang.org/x/net/context"
+	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )

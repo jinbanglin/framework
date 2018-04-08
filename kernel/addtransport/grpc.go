@@ -1,6 +1,7 @@
 package addtransport
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -20,7 +21,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/opentracing/opentracing-go"
 	"github.com/sony/gobreaker"
-	"golang.org/x/net/context"
+	context2 "golang.org/x/net/context"
 	"golang.org/x/time/rate"
 	"google.golang.org/grpc"
 )
@@ -40,7 +41,7 @@ type Scheduler struct {
 	sync.RWMutex
 }
 
-func (s *Scheduler) Invoking(ctx context.Context, request *payload.MossPacket) (response *payload.MossPacket, err error) {
+func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) (response *payload.MossPacket, err error) {
 	ctx = context.WithValue(ctx, CONTEXT_KEY_SERVICE_CODE, request.ServiceCode)
 	schedulerHandler, err := gScheduler.GetHandler(request.ServiceCode)
 	if err != nil {

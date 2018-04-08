@@ -3,7 +3,7 @@ package hello_moss
 import (
 	"github.com/jinbanglin/moss/_example/pb"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 func HelloWorldHandler(_ context.Context, request interface{}) (response interface{}, err error) {

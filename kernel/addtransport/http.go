@@ -1,7 +1,7 @@
 package addtransport
 
 import (
-	"golang.org/x/net/context"
+	"context"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -16,9 +16,9 @@ import (
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gorilla/mux"
+	"github.com/jinbanglin/moss/auth/moss_jwt"
 	"github.com/json-iterator/go"
 	"github.com/opentracing/opentracing-go"
-	"github.com/jinbanglin/moss/auth/moss_jwt"
 )
 
 type MutilEndpoints struct {

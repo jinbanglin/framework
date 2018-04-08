@@ -1,7 +1,7 @@
 package addendpoint
 
 import (
-	"golang.org/x/net/context"
+	"context"
 	"fmt"
 	"time"
 

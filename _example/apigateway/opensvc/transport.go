@@ -1,7 +1,7 @@
 package opensvc
 
 import (
-	"golang.org/x/net/context"
+	"context"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -27,8 +27,8 @@ func MakeOpensvcHTTPHandler() *mux.Router {
 		mosshttp.ServerErrorLogger(log.Logger{}),
 		mosshttp.ServerErrorEncoder(encodeError),
 	}
-	log.Info("HTTP SERVER |json at", "/api/v1/open/login/{protocol}/"+viper.GetString("etcdv3.server_id"))
-	r.Methods("POST").Path("/api/v1/open/login/{protocol}/" + viper.GetString("etcdv3.server_id")).Handler(mosshttp.NewServer(
+	log.Info("HTTP SERVER |json at", "/api/v1/open/sns/{protocol}/"+viper.GetString("etcdv3.server_id"))
+	r.Methods("POST").Path("/api/v1/open/sns/{protocol}/" + viper.GetString("etcdv3.server_id")).Handler(mosshttp.NewServer(
 		e.RegisterEndpoint,
 		decodeRegisterRequest,
 		encodeRegisterResponse,

@@ -2,7 +2,7 @@ package http
 
 import (
 	"bytes"
-	"golang.org/x/net/context"
+	"context"
 	"encoding/json"
 	"encoding/xml"
 	"io/ioutil"

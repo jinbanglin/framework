@@ -6,7 +6,7 @@ import (
 	"github.com/jinbanglin/moss/kernel/payload"
 	"github.com/jinbanglin/moss/metrics"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 type Service interface {

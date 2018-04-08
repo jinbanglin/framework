@@ -1,7 +1,7 @@
 package tracing
 
 import (
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/jinbanglin/moss"
 

@@ -1,7 +1,7 @@
 package limiter
 
 import (
-	"golang.org/x/net/context"
+	"context"
 	"errors"
 
 	"github.com/jinbanglin/moss"
