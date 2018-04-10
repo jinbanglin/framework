@@ -5,11 +5,9 @@ import (
 	"github.com/jinbanglin/moss/log"
 
 	"context"
-	"fmt"
 )
 
 func RegisterEndpoint(_ context.Context, request interface{}) (response interface{}, err error) {
-	fmt.Println("--------------1--------")
 	log.Info("RegisterEndpoint")
 	req := request.(*pb.RegisterReq)
 	res := &pb.RegisterRes{

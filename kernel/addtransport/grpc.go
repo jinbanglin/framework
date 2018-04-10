@@ -121,7 +121,6 @@ func (s *Scheduler) GetHandler(serviceCode uint32) (handler *SchedulerHandler, e
 }
 
 func decodeRequest(ctx context.Context, request interface{}) (interface{}, error) {
-	fmt.Println("-------1--11-1--1", request)
 	if request == nil {
 	}
 	return request, nil
