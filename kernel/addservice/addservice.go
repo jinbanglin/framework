@@ -7,6 +7,7 @@ import (
 	"github.com/jinbanglin/moss/metrics"
 
 	"context"
+	"fmt"
 )
 
 type Service interface {
@@ -30,6 +31,7 @@ func NewBasicService() Service {
 type basicService struct{}
 
 func (s basicService) Invoking(_ context.Context, input *payload.MossPacket) (*payload.MossPacket, error) {
+	fmt.Println("---------------service---------")
 	if input.ServiceCode < 1 {
 		return nil, errors.New("no protocol code")
 	}

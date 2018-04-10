@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/jinbanglin/moss/_example"
-	"github.com/jinbanglin/moss/_example/addgrpcsvc/hello_moss"
 	"github.com/jinbanglin/moss/_example/addgrpcsvc/register"
 	"github.com/jinbanglin/moss/_example/pb"
 	"github.com/jinbanglin/moss/kernel"

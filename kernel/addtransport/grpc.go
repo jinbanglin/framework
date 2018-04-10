@@ -56,7 +56,7 @@ func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) 
 		log.Error(err)
 		return response, err
 	}
-	_, res, err := schedulerHandler.handler.ServeGRPC(ctx, request)
+	_, res, err := schedulerHandler.handler.ServeGRPC(ctx, req)
 	if err != nil {
 		log.Errorf("Invoking |res=%v |err=%v", res, err)
 		return response, err
@@ -82,9 +82,10 @@ func NewGrpcServer(tracer opentracing.Tracer, ops []transportgrpc.ServerOption) 
 	return gScheduler
 }
 
-func NewHandler(endpoint moss.Endpoint, tracer opentracing.Tracer, ops []transportgrpc.ServerOption) transportgrpc.Handler {
+func NewHandler(handlerEndpoint moss.Endpoint, tracer opentracing.Tracer, ops []transportgrpc.ServerOption) transportgrpc.Handler {
 	service := addservice.NewService(gScheduler.metrics.Counters, gScheduler.metrics.SummaryError)
-	endpoint = addendpoint.NewEndpoint(service, gScheduler.metrics.SummarySuccess, opentracing.GlobalTracer()).InvokeEndpoint
+	endpoint := addendpoint.NewEndpoint(service, gScheduler.metrics.SummarySuccess, opentracing.GlobalTracer()).InvokeEndpoint
+	endpoint = handlerEndpoint
 	return transportgrpc.NewServer(
 		endpoint,
 		decodeRequest,
@@ -120,6 +121,7 @@ func (s *Scheduler) GetHandler(serviceCode uint32) (handler *SchedulerHandler, e
 }
 
 func decodeRequest(ctx context.Context, request interface{}) (interface{}, error) {
+	fmt.Println("-------1--11-1--1", request)
 	if request == nil {
 	}
 	return request, nil

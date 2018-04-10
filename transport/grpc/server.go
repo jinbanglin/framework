@@ -7,6 +7,7 @@ import (
 	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"fmt"
 )
 
 // Handler which should be called from the gRPC binding of the service
@@ -99,6 +100,7 @@ func (s Server) ServeGRPC(ctx context.Context, req interface{}) (context.Context
 		return ctx, response, err
 	}
 	response, err = s.e(ctx, request)
+	fmt.Println("---------2---",response,err)
 	if err != nil {
 		log.Error(err)
 		return ctx, response, err
