@@ -67,6 +67,7 @@ func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) 
 	}
 	response.Payload = loader
 	response.Message = &payload.Message{Code: 20000, Msg: "SUCCESS"}
+	response.ServiceCode=request.ServiceCode
 	return response, nil
 }
 
