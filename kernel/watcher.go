@@ -80,7 +80,7 @@ func newWatchEndpoint(serviceName ServiceName) (watcherEndPoint *WatcherEndpoint
 		watcherEndPoint.factory,
 	)
 	watcherEndPoint.lbRoundRobin = lb.NewRoundRobin(watcherEndPoint.sdEndPointer)
-	watcherEndPoint.retry = lb.Retry(3, time.Second*1, watcherEndPoint.lbRoundRobin)
+	watcherEndPoint.retry = lb.Retry(1, time.Millisecond*100, watcherEndPoint.lbRoundRobin)
 	watcherEndPoint.endpoint.InvokeEndpoint = watcherEndPoint.retry
 	return
 }

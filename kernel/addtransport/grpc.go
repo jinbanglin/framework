@@ -6,14 +6,11 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
-	"time"
-
 	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/circuitbreaker"
 	"github.com/jinbanglin/moss/kernel/addendpoint"
 	"github.com/jinbanglin/moss/kernel/addservice"
 	"github.com/jinbanglin/moss/kernel/payload"
-	"github.com/jinbanglin/moss/limiter"
 	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/tracing"
 	transportgrpc "github.com/jinbanglin/moss/transport/grpc"
@@ -22,8 +19,10 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/sony/gobreaker"
 	context2 "golang.org/x/net/context"
-	"golang.org/x/time/rate"
 	"google.golang.org/grpc"
+	"golang.org/x/time/rate"
+	"github.com/jinbanglin/moss/limiter"
+	"time"
 )
 
 const CONTEXT_KEY_SERVICE_CODE = "service_code"
@@ -45,7 +44,6 @@ func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) 
 	response = &payload.MossPacket{
 		Message: &payload.Message{Code: 50001, Msg: "invoking error"},
 	}
-	ctx = context.WithValue(ctx, CONTEXT_KEY_SERVICE_CODE, request.ServiceCode)
 	schedulerHandler, err := gScheduler.GetHandler(request.ServiceCode)
 	if err != nil {
 		log.Error(err)
@@ -53,11 +51,11 @@ func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) 
 	}
 	req := reflect.New(schedulerHandler.RequestType).Interface().(proto.Message)
 	if err = GetCodecerByServiceCode(request.ServiceCode).Unmarshal(request.Payload, req); err != nil {
-		log.Error(err)
+		log.Errorf("Invoking |request=%v |err=%v", request, err)
 		return response, err
 	}
-	ctx=context2.WithValue(ctx,"user_id",request.UserId)
-	ctx=context2.WithValue(ctx,"client_ip",request.ClientIp)
+	ctx = context2.WithValue(ctx, "user_id", request.UserId)
+	ctx = context2.WithValue(ctx, "client_ip", request.ClientIp)
 	_, res, err := schedulerHandler.handler.ServeGRPC(ctx, req)
 	if err != nil {
 		log.Errorf("Invoking |res=%v |err=%v", res, err)
@@ -65,11 +63,12 @@ func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) 
 	}
 	loader, err := GetCodecerByServiceCode(request.ServiceCode).Marshal(res.(proto.Message))
 	if err != nil {
+		log.Errorf("Invoking |res=%v |err=%v", res, err)
 		return response, err
 	}
 	response.Payload = loader
 	response.Message = &payload.Message{Code: 20000, Msg: "SUCCESS"}
-	response.ServiceCode=request.ServiceCode
+	response.ServiceCode = request.ServiceCode
 	return response, nil
 }
 
