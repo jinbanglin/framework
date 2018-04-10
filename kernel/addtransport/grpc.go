@@ -121,16 +121,11 @@ func (s *Scheduler) GetHandler(serviceCode uint32) (handler *SchedulerHandler, e
 }
 
 func decodeRequest(ctx context.Context, request interface{}) (interface{}, error) {
-	if request == nil {
-	}
 	return request, nil
 }
 
 func encodeResponse(ctx context.Context, request interface{}) (res interface{}, err error) {
-	serviceCode := ctx.Value(CONTEXT_KEY_SERVICE_CODE).(uint32)
-	response := &payload.MossPacket{ServiceCode: serviceCode}
-	response.Payload, err = GetCodecerByServiceCode(serviceCode).Marshal(request.(proto.Message))
-	return response, err
+	return request, nil
 }
 
 func NewGRPCClient(conn *grpc.ClientConn, tracer opentracing.Tracer) addservice.Service {
