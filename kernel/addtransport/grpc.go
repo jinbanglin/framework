@@ -42,23 +42,32 @@ type Scheduler struct {
 }
 
 func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) (response *payload.MossPacket, err error) {
+	response = &payload.MossPacket{
+		Message: &payload.Message{Code: 50001, Msg: "invoking error"},
+	}
 	ctx = context.WithValue(ctx, CONTEXT_KEY_SERVICE_CODE, request.ServiceCode)
 	schedulerHandler, err := gScheduler.GetHandler(request.ServiceCode)
 	if err != nil {
 		log.Error(err)
-		return nil, err
+		return response, err
 	}
 	req := reflect.New(schedulerHandler.RequestType).Interface().(proto.Message)
 	if err = GetCodecerByServiceCode(request.ServiceCode).Unmarshal(request.Payload, req); err != nil {
 		log.Error(err)
-		return nil, err
+		return response, err
 	}
 	_, res, err := schedulerHandler.handler.ServeGRPC(ctx, request)
 	if err != nil {
 		log.Errorf("Invoking |res=%v |err=%v", res, err)
-		return nil, err
+		return response, err
 	}
-	return res.(*payload.MossPacket), err
+	loader, err := GetCodecerByServiceCode(request.ServiceCode).Marshal(res.(proto.Message))
+	if err != nil {
+		return response, err
+	}
+	response.Payload = loader
+	response.Message = &payload.Message{Code: 20000, Msg: "SUCCESS"}
+	return response, nil
 }
 
 var gScheduler *Scheduler
