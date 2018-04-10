@@ -5,10 +5,12 @@ import (
 	"github.com/jinbanglin/moss/log"
 
 	"context"
+	"fmt"
 )
 
-func RegisterHandler(_ context.Context, request interface{}) (response interface{}, err error) {
-	log.Info("RegisterHandler")
+func RegisterEndpoint(_ context.Context, request interface{}) (response interface{}, err error) {
+	fmt.Println("--------------1--------")
+	log.Info("RegisterEndpoint")
 	req := request.(*pb.RegisterReq)
 	res := &pb.RegisterRes{
 		UserName:  req.UserName,

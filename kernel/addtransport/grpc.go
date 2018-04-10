@@ -120,6 +120,8 @@ func (s *Scheduler) GetHandler(serviceCode uint32) (handler *SchedulerHandler, e
 }
 
 func decodeRequest(ctx context.Context, request interface{}) (interface{}, error) {
+	if request == nil {
+	}
 	return request, nil
 }
 

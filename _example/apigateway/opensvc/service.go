@@ -6,6 +6,7 @@ import (
 	"github.com/jinbanglin/moss/kernel/payload"
 
 	"context"
+	"fmt"
 )
 
 type Service interface {
@@ -19,5 +20,7 @@ func NewEntryService() Service {
 }
 
 func (*EntryService) Register(ctx context.Context, request *payload.MossPacket) (*payload.MossPacket, error) {
-	return kernel.WatcherInvoking(_example.Addgrpcsvc, ctx, request)
+	res, err := kernel.WatcherInvoking(_example.Addgrpcsvc, ctx, request)
+	fmt.Println("-----2----", res, err)
+	return res, err
 }

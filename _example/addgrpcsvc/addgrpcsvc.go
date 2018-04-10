@@ -12,8 +12,7 @@ import (
 
 func main() {
 	kernel.AppServer.SetupConfig(_example.Addgrpcsvc)
-	kernel.GrpcInstance().RegisterProtoInvokeFunc(900001, &pb.HelloMoss{}, hello_moss.HelloWorldHandler)
-	kernel.GrpcInstance().RegisterProtoInvokeFunc(900003, &pb.RegisterReq{}, register.RegisterHandler)
+	kernel.GrpcInstance().RegisterProtoInvokeFunc(900003, &pb.RegisterReq{}, register.RegisterEndpoint)
 	kernel.AppServer.GrpcServerStart()
 	kernel.AppServer.Stop(10*time.Second, func() {
 		//TODO free

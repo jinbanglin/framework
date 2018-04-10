@@ -50,6 +50,9 @@ func NewEndpoint(svc addservice.Service, duration metrics.Histogram, trace opent
 
 func (s Set) Invoking(ctx context.Context, a *payload.MossPacket) (*payload.MossPacket, error) {
 	resp, err := s.InvokeEndpoint(ctx, a)
+	if err != nil {
+		return nil, err
+	}
 	return resp.(*payload.MossPacket), err
 }
 
