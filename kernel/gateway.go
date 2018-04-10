@@ -39,7 +39,7 @@ func (h *HttpGateway) getHostHeader(name ServiceName) string {
 	if strings.HasPrefix(h.prefix, "/") {
 		h.prefix = strings.TrimPrefix(h.prefix, "/")
 	}
-	format := "/%s%s/{protocol}/"
+	format := "/%s/%s/{protocol}/"
 	return fmt.Sprintf(format, h.prefix, name)
 }
 
