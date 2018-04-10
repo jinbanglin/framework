@@ -56,6 +56,8 @@ func (s *Scheduler) Invoking(ctx context2.Context, request *payload.MossPacket) 
 		log.Error(err)
 		return response, err
 	}
+	ctx=context2.WithValue(ctx,"user_id",request.UserId)
+	ctx=context2.WithValue(ctx,"client_ip",request.ClientIp)
 	_, res, err := schedulerHandler.handler.ServeGRPC(ctx, req)
 	if err != nil {
 		log.Errorf("Invoking |res=%v |err=%v", res, err)
