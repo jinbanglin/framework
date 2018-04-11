@@ -90,7 +90,8 @@ func (a *appServer) HttpsGatewayStart(r *mux.Router) {
 			GetCertificate: certManager.GetCertificate,
 		},
 	}
-	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	//go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	//go http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId))
 	server.ListenAndServeTLS("", "")
 }
 
