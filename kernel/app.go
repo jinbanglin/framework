@@ -80,9 +80,10 @@ func (a *appServer) HttpsGatewayStart(r *mux.Router) {
 		Prompt: autocert.AcceptTOS,
 		Cache:  autocert.DirCache("certs"),
 	}
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello Secure World")
 	})
+	r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("/root/data/view/"))))
 	server := &http.Server{
 		Addr:    ":443",
 		Handler: gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId),
