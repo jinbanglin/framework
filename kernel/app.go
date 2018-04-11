@@ -15,6 +15,9 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"google.golang.org/grpc"
+	"github.com/golang/crypto/acme/autocert"
+	"crypto/tls"
+	"fmt"
 )
 
 var AppServer = &appServer{}
@@ -66,6 +69,29 @@ func (a *appServer) HttpGatewayStart(r *mux.Router) {
 	gateway.loadBalancing(WatcherInstance())
 	log.Info("HttpGateway start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
 	http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId))
+}
+
+func (a *appServer) HttpsGatewayStart(r *mux.Router) {
+	WatcherInstance().Watch(a.Watchers)
+	gateway := NewHTTPGateway()
+	gateway.loadBalancing(WatcherInstance())
+	log.Info("HttpsGateway start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
+	certManager := autocert.Manager{
+		Prompt: autocert.AcceptTOS,
+		Cache:  autocert.DirCache("certs"),
+	}
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello Secure World")
+	})
+	server := &http.Server{
+		Addr:    ":443",
+		Handler: gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId),
+		TLSConfig: &tls.Config{
+			GetCertificate: certManager.GetCertificate,
+		},
+	}
+	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	server.ListenAndServeTLS("", "")
 }
 
 func (a *appServer) Run() {
