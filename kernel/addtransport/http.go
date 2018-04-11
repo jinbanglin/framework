@@ -80,7 +80,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 		return response, err
 	}
 	vars := mux.Vars(r)
-	c, ok := vars["protocol"]
+	c, ok := vars["service"]
 	if !ok {
 		return response, errors.New("no protocol")
 	}
