@@ -1,6 +1,8 @@
 package distributor
 
 import (
+	"crypto/tls"
+	"fmt"
 	"net"
 	"net/http"
 	"sync"
@@ -13,12 +15,10 @@ import (
 	"github.com/gorilla/mux"
 	"google.golang.org/grpc/reflection"
 
-	"google.golang.org/grpc"
 	"github.com/golang/crypto/acme/autocert"
-	"crypto/tls"
-	"fmt"
-	"github.com/spf13/viper"
 	"github.com/jinbanglin/moss"
+	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 
 	"github.com/jinbanglin/moss/payload"
 )

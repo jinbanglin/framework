@@ -17,8 +17,8 @@ import (
 	"github.com/jinbanglin/moss/log"
 
 	"github.com/gorilla/mux"
-	"github.com/jinbanglin/moss/payload"
 	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/payload"
 )
 
 func MakeOpensvcHTTPHandler() *mux.Router {
@@ -52,7 +52,7 @@ func decodeRegisterRequest(ctx context.Context, r *http.Request) (request interf
 	if err != nil {
 		return req, errors.New("no service code")
 	}
-	req.ServiceCode=uint32(serviceCode)
+	req.ServiceCode = uint32(serviceCode)
 	if b, err := ioutil.ReadAll(r.Body); err != nil || len(b) < 1 {
 		return req, errors.New("client data error")
 	} else {

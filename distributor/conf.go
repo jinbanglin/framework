@@ -1,21 +1,19 @@
 package distributor
 
 import (
-	"fmt"
 	"context"
-
-	"github.com/jinbanglin/moss/log"
-
-	"github.com/json-iterator/go"
-	"github.com/spf13/viper"
-
-	"github.com/fsnotify/fsnotify"
+	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
-	"os"
+	"time"
+
+	"github.com/fsnotify/fsnotify"
 	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery/etcdv3"
-	"time"
+	"github.com/jinbanglin/moss/log"
+	"github.com/json-iterator/go"
+	"github.com/spf13/viper"
 )
 
 type ConnectionType = string
@@ -100,7 +98,6 @@ func GetCurrentDirectory() string {
 	return strings.Replace(dir, "\\", "/", -1)
 }
 
-
 func defaultEtcdV3Client() etcdv3.Client {
 	client, err := etcdv3.NewClient(context.Background(), []string{"127.0.0.1:2379"}, etcdv3.ClientOptions{
 		CACert:        "",
@@ -116,4 +113,3 @@ func defaultEtcdV3Client() etcdv3.Client {
 	}
 	return client
 }
-

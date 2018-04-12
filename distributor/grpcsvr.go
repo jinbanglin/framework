@@ -1,8 +1,8 @@
 package distributor
 
 import (
-	"github.com/jinbanglin/moss"
 	"github.com/golang/protobuf/proto"
+	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/distributor/grpc"
 )
 

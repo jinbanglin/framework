@@ -13,10 +13,10 @@ import (
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gorilla/mux"
-	"github.com/jinbanglin/moss/auth/moss_jwt"
-	"github.com/json-iterator/go"
 	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/auth/moss_jwt"
 	"github.com/jinbanglin/moss/payload"
+	"github.com/json-iterator/go"
 )
 
 type MutilEndpoints struct {

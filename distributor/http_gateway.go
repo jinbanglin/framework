@@ -8,8 +8,8 @@ import (
 	distributorhttp "github.com/jinbanglin/moss/distributor/http"
 
 	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 	"github.com/jinbanglin/moss"
+	"github.com/spf13/viper"
 )
 
 type HttpGateway struct {

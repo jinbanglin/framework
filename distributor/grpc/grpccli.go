@@ -2,9 +2,9 @@ package grpc
 
 import (
 	"github.com/jinbanglin/moss"
-	"google.golang.org/grpc"
 	"github.com/jinbanglin/moss/payload"
 	transportgrpc "github.com/jinbanglin/moss/transport/grpc"
+	"google.golang.org/grpc"
 )
 
 func NewGRPCClient(conn *grpc.ClientConn) (endpoint moss.Endpoint) {

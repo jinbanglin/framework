@@ -9,10 +9,10 @@ import (
 	"github.com/jinbanglin/moss/discovery"
 	"github.com/jinbanglin/moss/discovery/etcdv3"
 	"github.com/jinbanglin/moss/discovery/lb"
-	"github.com/jinbanglin/moss/log"
-	"google.golang.org/grpc"
 	distributorgrpc "github.com/jinbanglin/moss/distributor/grpc"
+	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/payload"
+	"google.golang.org/grpc"
 )
 
 var gWatcher *Watcher
