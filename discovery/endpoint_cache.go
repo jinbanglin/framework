@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/moss/log"
 )
 
@@ -19,13 +19,13 @@ type endpointCache struct {
 	factory            Factory
 	cache              map[string]endpointCloser
 	err                error
-	endpoints          []moss.Endpoint
+	endpoints          []endpoint.Endpoint
 	invalidateDeadline time.Time
 	timeNow            func() time.Time
 }
 
 type endpointCloser struct {
-	moss.Endpoint
+	endpoint.Endpoint
 	io.Closer
 }
 
@@ -98,7 +98,7 @@ func (c *endpointCache) updateCache(instances []string) {
 	}
 
 	// Populate the slice of endpoints.
-	endpoints := make([]moss.Endpoint, 0, len(cache))
+	endpoints := make([]endpoint.Endpoint, 0, len(cache))
 	for _, instance := range instances {
 		// A bad factory may mean an instance is not present.
 		if _, ok := cache[instance]; !ok {
@@ -114,7 +114,7 @@ func (c *endpointCache) updateCache(instances []string) {
 
 // Endpoints yields the current set of (presumably identical) endpoints, ordered
 // lexicographically by the corresponding instance string.
-func (c *endpointCache) Endpoints() ([]moss.Endpoint, error) {
+func (c *endpointCache) Endpoints() ([]endpoint.Endpoint, error) {
 	// in the steady state we're going to have many goroutines calling Endpoints()
 	// concurrently, so to minimize contention we use a shared R-lock.
 	c.mtx.RLock()

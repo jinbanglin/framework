@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/endpoint"
 	"google.golang.org/grpc"
 )
 
@@ -28,7 +28,7 @@ func NewClient(cc *grpc.ClientConn, serviceName string, method string, grpcReply
 	}
 }
 
-func (c Client) Endpoint() moss.Endpoint {
+func (c Client) Endpoint() endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		response = reflect.New(c.grpcReply).Interface()
 		err = c.client.Invoke(ctx, c.method, request, response)

@@ -4,18 +4,18 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/moss/log"
 )
 
 type Server struct {
-	e            moss.Endpoint
+	e            endpoint.Endpoint
 	dec          DecodeRequestFunc
 	enc          EncodeResponseFunc
 	errorEncoder ErrorEncoder
 }
 
-func NewServer(e moss.Endpoint, dec DecodeRequestFunc, enc EncodeResponseFunc, errorEncoder ErrorEncoder) *Server {
+func NewServer(e endpoint.Endpoint, dec DecodeRequestFunc, enc EncodeResponseFunc, errorEncoder ErrorEncoder) *Server {
 	return &Server{e: e, dec: dec, enc: enc, errorEncoder: errorEncoder}
 }
 

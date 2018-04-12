@@ -3,8 +3,8 @@ package lb
 import (
 	"sync/atomic"
 
-	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery"
+	"github.com/jinbanglin/moss/endpoint"
 )
 
 // NewRoundRobin returns a load balancer that returns services in sequence.
@@ -20,7 +20,7 @@ type roundRobin struct {
 	c uint64
 }
 
-func (rr *roundRobin) Endpoint() (moss.Endpoint, error) {
+func (rr *roundRobin) Endpoint() (endpoint.Endpoint, error) {
 	endpoints, err := rr.s.Endpoints()
 	if err != nil {
 		return nil, err

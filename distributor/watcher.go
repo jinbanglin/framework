@@ -5,11 +5,10 @@ import (
 	"io"
 	"time"
 
-	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery"
 	"github.com/jinbanglin/moss/discovery/etcdv3"
 	"github.com/jinbanglin/moss/discovery/lb"
-	distributorgrpc "github.com/jinbanglin/moss/distributor/grpc"
+	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/payload"
 	"google.golang.org/grpc"
@@ -18,7 +17,7 @@ import (
 var gWatcher *Watcher
 
 type Watcher struct {
-	watchers map[moss.ServiceName]*WatcherEndpoint
+	watchers map[string]*WatcherEndpoint
 }
 
 type WatcherEndpoint struct {
@@ -26,28 +25,28 @@ type WatcherEndpoint struct {
 	factory       discovery.Factory
 	sdEndPointer  discovery.Endpointer
 	lbRoundRobin  lb.Balancer
-	retry         moss.Endpoint
-	endpoint      moss.Endpoint
+	retry         endpoint.Endpoint
+	endpoint      endpoint.Endpoint
 }
 
 func WatcherInstance() *Watcher {
 	if gWatcher == nil {
-		gWatcher = &Watcher{watchers: make(map[moss.ServiceName]*WatcherEndpoint)}
+		gWatcher = &Watcher{watchers: make(map[string]*WatcherEndpoint)}
 	}
 	return gWatcher
 }
 
-func (w *Watcher) Watch(config []*Watch) {
-	for _, v := range config {
-		log.Info("watch service name", v.ServiceName)
-		w.watchers[v.ServiceName] = newWatchEndpoint(v.ServiceName)
+func (w *Watcher) Watch(services, etcdAddress []string) {
+	for _, v := range services {
+		log.Info("watch service name", v)
+		w.watchers[v] = newWatchEndpoint(v, etcdAddress)
 	}
 }
 
-func newWatchEndpoint(serviceName moss.ServiceName) (watcher *WatcherEndpoint) {
+func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *WatcherEndpoint) {
 	watcher = &WatcherEndpoint{}
-	watcher.etcdInstancer = etcdv3.NewInstancer(defaultEtcdV3Client(), "/"+string(serviceName))
-	watcher.factory = func(instance string) (moss.Endpoint, io.Closer, error) {
+	watcher.etcdInstancer = etcdv3.NewInstancer(etcdv3.DefaultEtcdV3Client(etcdAddress), "/"+string(serviceName))
+	watcher.factory = func(instance string) (endpoint.Endpoint, io.Closer, error) {
 		if conn, err := grpc.Dial(instance, grpc.WithInsecure(), grpc.WithBackoffMaxDelay(1*time.Second),
 			grpc.WithDefaultCallOptions(
 				grpc.MaxCallRecvMsgSize(64<<20),
@@ -56,7 +55,7 @@ func newWatchEndpoint(serviceName moss.ServiceName) (watcher *WatcherEndpoint) {
 			log.Error(err)
 			return nil, nil, err
 		} else {
-			return distributorgrpc.NewGRPCClient(conn), conn, nil
+			return NewGRPCClient(conn), conn, nil
 		}
 	}
 	watcher.sdEndPointer = discovery.NewEndpointer(watcher.etcdInstancer, watcher.factory)
@@ -66,7 +65,7 @@ func newWatchEndpoint(serviceName moss.ServiceName) (watcher *WatcherEndpoint) {
 	return
 }
 
-func WatcherInvoking(serviceName moss.ServiceName, ctx context.Context, request *payload.MossPacket) (response *payload.MossPacket, error error) {
+func WatcherInvoking(serviceName string, ctx context.Context, request *payload.MossPacket) (response *payload.MossPacket, error error) {
 	if ret, err := WatcherInstance().watchers[serviceName].endpoint(ctx, request); err != nil {
 		return nil, err
 	} else {

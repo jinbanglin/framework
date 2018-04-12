@@ -3,7 +3,7 @@ package discovery
 import (
 	"time"
 
-	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/endpoint"
 )
 
 // Endpointer listens to a service discovery system and yields a set of
@@ -11,14 +11,14 @@ import (
 // to the service discovery system, or within the system itself; an Endpointer
 // may yield no endpoints without error.
 type Endpointer interface {
-	Endpoints() ([]moss.Endpoint, error)
+	Endpoints() ([]endpoint.Endpoint, error)
 }
 
 // FixedEndpointer yields a fixed set of endpoints.
-type FixedEndpointer []moss.Endpoint
+type FixedEndpointer []endpoint.Endpoint
 
 // Endpoints implements Endpointer.
-func (s FixedEndpointer) Endpoints() ([]moss.Endpoint, error) { return s, nil }
+func (s FixedEndpointer) Endpoints() ([]endpoint.Endpoint, error) { return s, nil }
 
 // NewEndpointer creates an Endpointer that subscribes to updates from Instancer src
 // and uses factory f to create Endpoints. If src notifies of an error, the Endpointer
@@ -84,6 +84,6 @@ func (de *DefaultEndpointer) Close() {
 }
 
 // Endpoints implements Endpointer.
-func (de *DefaultEndpointer) Endpoints() ([]moss.Endpoint, error) {
+func (de *DefaultEndpointer) Endpoints() ([]endpoint.Endpoint, error) {
 	return de.cache.Endpoints()
 }

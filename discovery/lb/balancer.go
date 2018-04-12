@@ -3,12 +3,12 @@ package lb
 import (
 	"errors"
 
-	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/endpoint"
 )
 
 // Balancer yields endpoints according to some heuristic.
 type Balancer interface {
-	Endpoint() (moss.Endpoint, error)
+	Endpoint() (endpoint.Endpoint, error)
 }
 
 // ErrNoEndpoints is returned when no qualifying endpoints are available.

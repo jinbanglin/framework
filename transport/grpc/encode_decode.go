@@ -1,11 +1,11 @@
 package grpc
 
 import (
-	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/endpoint"
 )
 
-type decodeFunc moss.Endpoint
-type encodeFunc moss.Endpoint
+type decodeFunc endpoint.Endpoint
+type encodeFunc endpoint.Endpoint
 
 // DecodeRequestFunc extracts a user-domain request object from a gRPC request.
 // It's designed to be used in gRPC servers, for server-side endpoints. One

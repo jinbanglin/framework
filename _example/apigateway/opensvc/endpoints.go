@@ -3,14 +3,14 @@ package opensvc
 import (
 	"context"
 
-	"github.com/jinbanglin/moss"
-	"github.com/jinbanglin/moss/payload"
 	"github.com/jinbanglin/moss/_example"
 	"github.com/jinbanglin/moss/distributor"
+	"github.com/jinbanglin/moss/endpoint"
+	"github.com/jinbanglin/moss/payload"
 )
 
 type Endpoints struct {
-	SnsEndpoint moss.Endpoint
+	SnsEndpoint endpoint.Endpoint
 }
 
 func MakeServerEndpoints() Endpoints {

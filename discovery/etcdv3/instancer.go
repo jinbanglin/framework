@@ -1,6 +1,9 @@
 package etcdv3
 
 import (
+	"context"
+	"time"
+
 	"github.com/jinbanglin/moss/discovery"
 	"github.com/jinbanglin/moss/log"
 )
@@ -68,4 +71,20 @@ func (s *Instancer) Register(ch chan<- discovery.Event) {
 // Deregister implements Instancer.
 func (s *Instancer) Deregister(ch chan<- discovery.Event) {
 	s.cache.Deregister(ch)
+}
+
+func DefaultEtcdV3Client(address []string) Client {
+	client, err := NewClient(context.Background(), address, ClientOptions{
+		CACert:        "",
+		Cert:          "",
+		Key:           "",
+		Username:      "",
+		Password:      "",
+		DialTimeout:   time.Second * 3,
+		DialKeepAlive: time.Second * 30,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return client
 }

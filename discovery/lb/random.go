@@ -3,8 +3,8 @@ package lb
 import (
 	"math/rand"
 
-	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery"
+	"github.com/jinbanglin/moss/endpoint"
 )
 
 // NewRandom returns a load balancer that selects services randomly.
@@ -20,7 +20,7 @@ type random struct {
 	r *rand.Rand
 }
 
-func (r *random) Endpoint() (moss.Endpoint, error) {
+func (r *random) Endpoint() (endpoint.Endpoint, error) {
 	endpoints, err := r.s.Endpoints()
 	if err != nil {
 		return nil, err

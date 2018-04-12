@@ -17,7 +17,6 @@ import (
 	"github.com/jinbanglin/moss/log"
 
 	"github.com/gorilla/mux"
-	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/payload"
 )
 
@@ -64,7 +63,7 @@ func decodeRegisterRequest(ctx context.Context, r *http.Request) (request interf
 func encodeRegisterResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	res := response.(*payload.MossPacket)
 	ret := &pb.RegisterRes{}
-	if err := moss.GetCodec(res.ServiceCode).Unmarshal(res.Payload, ret); err != nil {
+	if err := payload.GetCodec(res.ServiceCode).Unmarshal(res.Payload, ret); err != nil {
 		return err
 	}
 	signedKey, err := moss_jwt.NewJwtToken(ret.UserName, ret.UserId, ret.Audience)
