@@ -1,4 +1,4 @@
-package addtransport
+package moss
 
 import (
 	"github.com/golang/protobuf/proto"
@@ -34,7 +34,7 @@ func (PROTOCodec) Unmarshal(payload []byte, message proto.Message) error {
 var gJSONCodec = JSONCodec{}
 var gPROTOCodec = PROTOCodec{}
 
-func GetCodecerByServiceCode(serviceCode uint32) Codecer {
+func GetCodec(serviceCode uint32) Codecer {
 	switch serviceCode&1 == 0 {
 	case true:
 		return gPROTOCodec

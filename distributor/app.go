@@ -1,4 +1,4 @@
-package kernel
+package distributor
 
 import (
 	"net"
@@ -18,20 +18,22 @@ import (
 	"github.com/golang/crypto/acme/autocert"
 	"crypto/tls"
 	"fmt"
+	"github.com/spf13/viper"
+	"github.com/jinbanglin/moss"
+
+	distributorgrpc "github.com/jinbanglin/moss/distributor/grpc"
 )
 
 var AppServer = &appServer{}
 
 type appServer struct {
 	*ConfigManager
-	ServiceName
+	moss.ServiceName
 	wait sync.WaitGroup
 }
 
-func (a *appServer) SetupConfig(name ServiceName, f ...func()) {
-	AppServer = &appServer{ConfigManager: &ConfigManager{
-		EtcdEndPoints: &EtcdV3{},
-	}, ServiceName: name}
+func (a *appServer) SetupConfig(name moss.ServiceName, f ...func()) {
+	AppServer = &appServer{ConfigManager: &ConfigManager{EtcdEndPoints: &EtcdV3{}}, ServiceName: name}
 	AppServer.setupConfig(name, f...)
 }
 
@@ -44,7 +46,7 @@ func (a *appServer) getServerAddr(connectionType ConnectionType) string {
 	panic("no config connection type : " + connectionType)
 }
 
-func (a *appServer) GrpcServerStart() {
+func (a *appServer) GRPCServerStart() {
 	addr := a.getServerAddr(CONNECTION_TYPE_GRPC)
 	a.registerEtcdV3(addr)
 	if len(a.Watchers) > 0 {
@@ -54,36 +56,29 @@ func (a *appServer) GrpcServerStart() {
 	if err != nil {
 		panic(err)
 	}
-	log.Info("GrpcServer |start at:", addr)
+	log.Info("start at:", addr)
 	baseServer := grpc.NewServer()
-	payload.RegisterInvokingServer(baseServer, GrpcInstance().gScheduler)
+	payload.RegisterInvokingServer(baseServer, distributorgrpc.NewGRPCServer().Scheduler)
 	reflection.Register(baseServer)
-	if baseServer.Serve(grpcListener) != nil {
-		panic("GrpcServer Work error")
+	if err = baseServer.Serve(grpcListener); err != nil {
+		panic(err)
 	}
 }
 
-func (a *appServer) HttpGatewayStart(r *mux.Router) {
+func (a *appServer) HTTPTLSGatewayStart(r *mux.Router) {
 	WatcherInstance().Watch(a.Watchers)
 	gateway := NewHTTPGateway()
 	gateway.loadBalancing(WatcherInstance())
-	log.Info("HttpGateway start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
-	http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId))
-}
-
-func (a *appServer) HttpsGatewayStart(r *mux.Router) {
-	WatcherInstance().Watch(a.Watchers)
-	gateway := NewHTTPGateway()
-	gateway.loadBalancing(WatcherInstance())
-	log.Info("HttpsGateway start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
+	log.Info("start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
+	r.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Hello Secure World")
+	})
+	//r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("/root/data/view/"))))
+	r.PathPrefix(viper.GetString("server.static")).Handler(http.StripPrefix(viper.GetString("server.static"), http.FileServer(http.Dir("/root/data/view/"))))
 	certManager := autocert.Manager{
 		Prompt: autocert.AcceptTOS,
 		Cache:  autocert.DirCache("certs"),
 	}
-	r.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello Secure World")
-	})
-	r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("/root/data/view/"))))
 	server := &http.Server{
 		Addr:    ":443",
 		Handler: gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId),
@@ -91,8 +86,7 @@ func (a *appServer) HttpsGatewayStart(r *mux.Router) {
 			GetCertificate: certManager.GetCertificate,
 		},
 	}
-	//go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
-	//go http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId))
+	go http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r, a.EtcdEndPoints.ServerId))
 	server.ListenAndServeTLS("", "")
 }
 
@@ -101,7 +95,7 @@ func (a *appServer) Run() {
 }
 
 func (a *appServer) registerEtcdV3(serverAddr string) {
-	NewEtcdV3Client().Register(etcdv3.Service{
+	defaultEtcdV3Client().Register(etcdv3.Service{
 		Key:   "/" + a.ServiceName + "/" + a.ConfigManager.EtcdEndPoints.ServerId,
 		Value: serverAddr,
 		TTL:   etcdv3.NewTTLOption(0, 0),
@@ -125,3 +119,4 @@ func (a *appServer) Stop(timeout time.Duration, f ...func()) {
 	RegisterContinueSignal(syscall.SIGTERM, process)
 	RegisterContinueSignal(syscall.SIGINT, process)
 }
+

@@ -1,29 +1,28 @@
-package kernel
+package distributor
 
 import (
 	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/jinbanglin/moss/kernel/addendpoint"
-	"github.com/jinbanglin/moss/kernel/addtransport"
+	distributorhttp "github.com/jinbanglin/moss/distributor/http"
 
 	"github.com/gorilla/mux"
-	"github.com/opentracing/opentracing-go"
 	"github.com/spf13/viper"
+	"github.com/jinbanglin/moss"
 )
 
 type HttpGateway struct {
-	cache       map[ServiceName]string //service name:route url array
-	proxyServer addtransport.MutilEndpoints
+	cache       map[moss.ServiceName]string
+	proxyServer distributorhttp.MutilEndpoints
 	prefix      string
 }
 
 func NewHTTPGateway() *HttpGateway {
 	return &HttpGateway{
-		cache: make(map[ServiceName]string),
-		proxyServer: addtransport.MutilEndpoints{
-			Endpoints: make(map[string]addendpoint.Set),
+		cache: make(map[moss.ServiceName]string),
+		proxyServer: distributorhttp.MutilEndpoints{
+			Endpoints: make(map[string]moss.Endpoint),
 		},
 		prefix: viper.GetString("server.http_prefix"),
 	}
@@ -35,18 +34,18 @@ func (h *HttpGateway) loadBalancing(watcher *Watcher) {
 	}
 }
 
-func (h *HttpGateway) getHostHeader(name ServiceName) string {
+func (h *HttpGateway) getHostHeader(name moss.ServiceName) string {
 	if strings.HasPrefix(h.prefix, "/") {
 		h.prefix = strings.TrimPrefix(h.prefix, "/")
 	}
-	format := "/%s/%s/{protocol}/"
+	format := "/%s/%s/{service_code}/"
 	return fmt.Sprintf(format, h.prefix, name)
 }
 
-func (h *HttpGateway) GetServiceTpl(name ServiceName) string {
+func (h *HttpGateway) GetServiceTpl(name moss.ServiceName) string {
 	return h.cache[name]
 }
 
 func (h *HttpGateway) MakeHttpHandle(r *mux.Router, serverId string) http.Handler {
-	return addtransport.MakeMutilHTTPHandler(r, h.proxyServer, opentracing.GlobalTracer(), serverId)
+	return distributorhttp.MakeHTTPGateway(r, h.proxyServer, serverId)
 }

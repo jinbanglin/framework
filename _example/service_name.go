@@ -1,6 +1,8 @@
 package _example
 
-import "github.com/jinbanglin/moss/kernel"
+import (
+	"github.com/jinbanglin/moss"
+)
 
-var Addgrpcsvc kernel.ServiceName = "addgrpcsvc"
-var Apigateway kernel.ServiceName = "apigateway"
+var Addgrpcsvc moss.ServiceName = "addgrpcsvc"
+var Apigateway moss.ServiceName = "apigateway"

@@ -1,4 +1,4 @@
-package addtransport
+package distributor
 
 import (
 	"context"
@@ -7,10 +7,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/jinbanglin/moss/kernel/addendpoint"
 	"github.com/jinbanglin/moss/kernel/payload"
 	"github.com/jinbanglin/moss/log"
-	"github.com/jinbanglin/moss/tracing"
 	httptransport "github.com/jinbanglin/moss/transport/http"
 
 	jwtgo "github.com/dgrijalva/jwt-go"
@@ -18,49 +16,28 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinbanglin/moss/auth/moss_jwt"
 	"github.com/json-iterator/go"
-	"github.com/opentracing/opentracing-go"
+	"github.com/jinbanglin/moss"
 )
 
 type MutilEndpoints struct {
-	Endpoints map[string]addendpoint.Set
+	Endpoints map[string]moss.Endpoint
 }
 
-func MakeMutilHTTPHandler(r *mux.Router, endpoints MutilEndpoints, tracer opentracing.Tracer, serviceId string) http.Handler {
-	if r == nil {
-		r = mux.NewRouter()
-	}
-	options := []httptransport.ServerOption{
-		httptransport.ServerErrorEncoder(errorEncoder),
-		httptransport.ServerErrorLogger(log.Logger{}),
-	}
+func MakeHTTPGateway(r *mux.Router, endpoints MutilEndpoints, serviceId string) http.Handler {
 	for k, v := range endpoints.Endpoints {
-		log.Info("HTTP SERVER |run at", k+serviceId)
+		log.Info("run at", k+serviceId)
 		r.Methods("POST").Path(k + serviceId).Handler(httptransport.NewServer(
-			v.InvokeEndpoint,
+			v,
 			decodeHTTPInvokeRequest,
 			encodeHTTPGenericResponse,
-			append(options, httptransport.ServerBefore(tracing.HTTPToContext(tracer, "handler")))...,
+			errorEncoder,
 		))
 	}
 	return r
 }
 
-func errorEncoder(ctx context.Context, err error, w http.ResponseWriter) {
-	if err != nil {
-		if v := ctx.Value(http.StatusUnauthorized); v != nil {
-			if v.(bool) {
-				w.WriteHeader(http.StatusUnauthorized)
-				return
-			}
-		}
-		w.WriteHeader(http.StatusInternalServerError)
-		jsoniter.NewEncoder(w).Encode(&payload.MossPacket{
-			Message: &payload.Message{
-				Code: 50001,
-				Msg:  "server internal error ",
-			},
-		})
-	}
+func errorEncoder(ctx context.Context, response interface{}, w http.ResponseWriter) {
+	jsoniter.NewEncoder(w).Encode(response)
 }
 
 func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{}, error) {

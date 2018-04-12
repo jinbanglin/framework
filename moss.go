@@ -1,4 +1,3 @@
-// moss Endpoint is adapter to all handler middleware filter
 package moss
 
 import (
@@ -7,4 +6,8 @@ import (
 
 type Endpoint func(ctx context.Context, request interface{}) (response interface{}, err error)
 
-type Middleware func(Endpoint) Endpoint
+type EndpointAdapter func(Endpoint) Endpoint
+
+type ServiceCode uint32
+type ServiceName string
+

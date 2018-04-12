@@ -1,4 +1,4 @@
-package kernel
+package distributor
 
 import (
 	"errors"
@@ -9,7 +9,7 @@ import (
 	"github.com/deckarep/golang-set"
 )
 
-var gsignal = mapset.NewSet()
+var gSignal = mapset.NewSet()
 
 var SigAlreadyRegisted = errors.New("sig already registed")
 
@@ -27,24 +27,24 @@ func RegisterSignal(sig os.Signal, process func()) error {
 }
 
 func register(sig os.Signal) (chan os.Signal, error) {
-	if gsignal.Contains(sig) {
+	if gSignal.Contains(sig) {
 		log.Fatal("signal", sig, "already registed")
 		return nil, SigAlreadyRegisted
 	}
-	gsignal.Add(sig)
-	sig_chan := make(chan (os.Signal))
-	signal.Notify(sig_chan, sig)
-	return sig_chan, nil
+	gSignal.Add(sig)
+	sigChan := make(chan os.Signal)
+	signal.Notify(sigChan, sig)
+	return sigChan, nil
 }
 
 func RegisterContinueSignal(sig os.Signal, process func()) error {
-	sig_chan, err := register(sig)
+	sigChan, err := register(sig)
 	if err != nil {
 		return err
 	}
 	go func() {
 		for {
-			msg := <-sig_chan
+			msg := <-sigChan
 			log.Println("sig", msg, "receveid")
 			process()
 		}
@@ -53,5 +53,5 @@ func RegisterContinueSignal(sig os.Signal, process func()) error {
 }
 
 func SignalProcessed(sig os.Signal) bool {
-	return gsignal.Contains(sig)
+	return gSignal.Contains(sig)
 }

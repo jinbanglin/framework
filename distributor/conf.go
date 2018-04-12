@@ -1,7 +1,8 @@
-package kernel
+package distributor
 
 import (
 	"fmt"
+	"context"
 
 	"github.com/jinbanglin/moss/log"
 
@@ -12,10 +13,11 @@ import (
 	"path/filepath"
 	"strings"
 	"os"
+	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/discovery/etcdv3"
 )
 
 type ConnectionType = string
-type ServiceName = string
 
 const (
 	CONNECTION_TYPE_DEBUG   = "DEBUG"
@@ -42,37 +44,31 @@ type Connection struct {
 	ConnType ConnectionType `json:"conn_type"`
 }
 
-type Watch struct {
-	ServiceName ServiceName `json:"service_name"`
-}
+type Watch struct{ ServiceName moss.ServiceName `json:"service_name"` }
 
-//use "github.com/spf13/viper" to config app
-
-func (c *ConfigManager) setupConfig(serviceName ServiceName, f ...func()) {
-	c.configFile = GetCurrentDirectory() + "/" + serviceName + ".toml"
-	f = append(f, func() {
-		{
+func (c *ConfigManager) setupConfig(serviceName moss.ServiceName, f ...func()) {
+	c.configFile = GetCurrentDirectory() + "/" + string(serviceName) + ".toml"
+	f = append(f,
+		func() {
 			b, _ := jsoniter.Marshal(viper.Get("connection"))
 			if err := jsoniter.Unmarshal(b, &c.Connections); err != nil {
-				log.Error("chaos error |json Unmarshal", err)
+				log.Error("json Unmarshal", err)
 				return
 			}
-		}
-		{
+
+		}, func() {
 			b, _ := jsoniter.Marshal(viper.Get("etcdv3"))
 			if err := jsoniter.Unmarshal(b, c.EtcdEndPoints); err != nil {
-				log.Error("chaos error |json Unmarshal", err)
+				log.Error("json Unmarshal", err)
 				return
 			}
-		}
-		{
+		}, func() {
 			b, _ := jsoniter.Marshal(viper.Get("watch"))
 			if err := jsoniter.Unmarshal(b, &c.Watchers); err != nil {
-				log.Error("chaos error |json Unmarshal", err)
+				log.Error("json Unmarshal", err)
 				return
 			}
-		}
-	})
+		})
 	c.fsnotify(f...)
 }
 
@@ -81,14 +77,14 @@ func (c *ConfigManager) fsnotify(f ...func()) {
 	viper.SetConfigFile(c.configFile)
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		panic(fmt.Errorf("fatal error config file: %s \n", err))
 	}
 	for _, v := range f {
 		v()
 	}
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		log.Infof("ConfigManager |Config file changed:", e.Name)
+		log.Infof("config file changed:%s", e.Name)
 		for _, v := range f {
 			v()
 		}
@@ -102,3 +98,21 @@ func GetCurrentDirectory() string {
 	}
 	return strings.Replace(dir, "\\", "/", -1)
 }
+
+
+func defaultEtcdV3Client() etcdv3.Client {
+	client, err := etcdv3.NewClient(context.Background(), []string{"127.0.0.1:2379"}, etcdv3.ClientOptions{
+		CACert:        "",
+		Cert:          "",
+		Key:           "",
+		Username:      "",
+		Password:      "",
+		DialTimeout:   time.Second * 3,
+		DialKeepAlive: time.Second * 30,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return client
+}
+
