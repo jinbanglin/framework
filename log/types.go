@@ -14,7 +14,7 @@ type Hook interface {
 }
 
 type Logger struct {
-	look           uint32 //monitor run state with block stop or running
+	look           uint32
 	link           string
 	path           string
 	fileName       string
@@ -27,18 +27,7 @@ type Logger struct {
 	bucket         chan *bytes.Buffer
 	bucketFlushLen int
 	lock           *sync.RWMutex
-	output         io.Writer //out is file os.Stdout or kafaka
+	output         io.Writer
 	closeSignal    chan string
-	//queue          chan *bytesBuffer
-}
-
-type config struct {
-	Llevel          uint8  `json:"llevel"`
-	Lmaxsize        int    `json:"lmaxsize"`
-	Lbufsize        int    `json:"lbufsize"`
-	Lout            string `json:"lout"`
-	Lbucketlen      int    `json:"lbucketlen"`
-	Lfilename       string `json:"lfilename"`
-	Lfilepath       string `json:"lfilepath"`
-	Lpollerinterval int    `json:"lpollerinterval"`
+	sigChan        chan os.Signal
 }

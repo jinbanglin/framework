@@ -1,9 +1,11 @@
 package log
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"github.com/spf13/viper"
 )
+
+type level = uint8
+type coreStatus = uint32
 
 const (
 	_DEBUG    level = iota + 1
@@ -18,50 +20,35 @@ var (
 	coreBlock   coreStatus = 0 //gLogger is block
 	coreRunning coreStatus = 1 //gLogger is running
 )
-var out = "stdout"
-var maxSize int = 256 * 1024 * 1024
-var bucketLen int = 1024
-var bufSize int = 2 * 1024 * 1024
-var fileName string = "github.com/jinbanglin/moss"
-var filePath string = getCurrentDirectory()
-var levelFlag level = _DEBUG
-var pollInterval = 500
+var gSetOut = "file"
+var gSetMaxSize = 256 * 1024 * 1024
+var gSetBucketLen = 1024
+var gSetBufSize = 2 * 1024 * 1024
+var gSetFilename = "moss"
+var gSetFilePath = getCurrentDirectory()
+var gSetLevel = _DEBUG
+var gSetPollerInterval = 500
 
-type level = uint8
-type coreStatus = uint32
-
-func loadConfig() {
-	//todo use viper
-	b, err := ioutil.ReadFile("logx.json")
-	if err != nil {
-		b, err = ioutil.ReadFile("config.json")
-		if err != nil {
-			return
-		}
+func setupConfig() {
+	if value := viper.GetInt("log.bucketlen"); value > 0 {
+		gSetBucketLen = value
 	}
-	var config config
-	if err = json.Unmarshal(b, &config); err != nil {
-		return
+	if value := viper.GetString("log.filename"); value != "" {
+		gSetFilename = value
 	}
-	if x := config.Lbucketlen; x != 0 {
-		bucketLen = x
+	if value := viper.GetString("log.filepath"); value != "" {
+		gSetFilePath = value
 	}
-	if x := config.Lfilename; x != "" {
-		fileName = x
+	if value := viper.GetInt("log.level"); value > 0 {
+		gSetLevel = level(value)
 	}
-	if x := config.Lfilepath; x != "" {
-		filePath = x
+	if value := viper.GetInt("log.maxsize"); value > 0 {
+		gSetMaxSize = value
 	}
-	if x := config.Llevel; x != 0 {
-		levelFlag = level(x)
+	if value := viper.GetString("log.out"); value != "" {
+		gSetOut = value
 	}
-	if x := config.Lmaxsize; x != 0 {
-		maxSize = x * 1024 * 1024
-	}
-	if x := config.Lout; x != "" {
-		out = x
-	}
-	if x := config.Lpollerinterval; x != 0 {
-		pollInterval = x
+	if value := viper.GetInt("log.interval"); value > 0 {
+		gSetPollerInterval = value
 	}
 }

@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/signal"
 	"path"
-	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -16,37 +15,31 @@ import (
 	"sync/atomic"
 	"syscall"
 	"time"
+	"path/filepath"
 )
 
 var gLogger *Logger
 
 func init() {
-	chaos()
-	if out == "file" {
-		go poller()
-	}
-}
-
-func chaos() {
-	loadConfig()
+	setupConfig()
 	y, m, d := time.Now().Date()
-	if gLogger == nil {
-		gLogger = &Logger{
-			look:        uint32(coreDead),
-			fileName:    fileName,
-			fileBufSize: bufSize,
-			path:        filepath.Join(filePath, fileName),
-			timestamp:   y*10000 + int(m)*100 + d*1,
-			fileMaxSize: maxSize,
-			bucket:      make(chan *bytes.Buffer, bucketLen),
-			closeSignal: make(chan string),
-			lock:        &sync.RWMutex{},
-		}
+	gLogger = &Logger{
+		look:        uint32(coreDead),
+		fileName:    gSetFilename,
+		fileBufSize: gSetBufSize,
+		path:        filepath.Join(gSetFilePath, gSetFilename),
+		timestamp:   y*10000 + int(m)*100 + d*1,
+		fileMaxSize: gSetMaxSize,
+		bucket:      make(chan *bytes.Buffer, gSetBucketLen),
+		closeSignal: make(chan string),
+		lock:        &sync.RWMutex{},
+		sigChan:     make(chan os.Signal),
 	}
+	go poller()
 }
 
 func (l *Logger) loadCurLogFile() error {
-	l.link = filepath.Join(l.path, fileName+".log")
+	l.link = filepath.Join(l.path, gSetFilename+".log")
 	actFileName, ok := isLinkFile(l.link)
 	if !ok {
 		return errors.New("is not link file")
@@ -93,7 +86,7 @@ func (l *Logger) createFile() (err error) {
 	l.file = f
 	l.fileActualSize = 0
 	l.fileWriter = bufio.NewWriterSize(f, l.fileBufSize)
-	l.link = filepath.Join(l.path, fileName+".log")
+	l.link = filepath.Join(l.path, gSetFilename+".log")
 	return createLinkFile(l.fileName, l.link)
 }
 
@@ -116,42 +109,22 @@ func (l *Logger) rotate() bool {
 	}
 	l.fileWriter.Flush()
 	closeFile(l.file)
-	if err := l.createFile(); err != nil {
-		return false
-	}
-	return true
+	return l.createFile() == nil
 }
 
-func (l *Logger) lookRunning() bool {
-	if atomic.LoadUint32(&l.look) == uint32(coreRunning) {
-		return true
-	}
-	return false
-}
+func (l *Logger) lookRunning() bool { return atomic.LoadUint32(&l.look) == uint32(coreRunning) }
 
-func (l *Logger) lookDead() bool {
-	if atomic.LoadUint32(&l.look) == uint32(coreDead) {
-		return true
-	}
-	return false
-}
+func (l *Logger) lookDead() bool { return atomic.LoadUint32(&l.look) == uint32(coreDead) }
 
-func (l *Logger) lookBlock() bool {
-	if atomic.LoadUint32(&l.look) == uint32(coreBlock) {
-		return true
-	}
-	return false
-}
+func (l *Logger) lookBlock() bool { return atomic.LoadUint32(&l.look) == uint32(coreBlock) }
 
 func (l *Logger) signalHandler() {
-	var sigChan = make(chan os.Signal)
-	//syscall.SIGHUP
-	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGQUIT)
+	signal.Notify(l.sigChan, syscall.SIGTERM, syscall.SIGINT)
 	for {
 		select {
-		case sig := <-sigChan:
+		case sig := <-l.sigChan:
 			l.closeSignal <- "close"
-			fmt.Println("LOGX receive os signal is ", sig)
+			fmt.Println("receive os signal is ", sig)
 			l.fileWriter.Flush()
 			closeFile(l.file)
 			atomic.SwapUint32(&l.look, uint32(coreDead))
@@ -164,45 +137,23 @@ func (l *Logger) signalHandler() {
 func (l *Logger) release(buf *bytes.Buffer) { bufferPoolFree(buf) }
 
 func caller() string {
-	if pc, f, l, ok := runtime.Caller(2); ok {
-		funcName := runtime.FuncForPC(pc).Name()
-		return path.Base(f) + "|" + path.Base(funcName) + "|" + strconv.Itoa(l)
-	}
-	//pc := make([]uintptr, 3, 3)
-	//cnt := runtime.Callers(6, pc)
-	//
-	//for i := 0; i < cnt; i++ {
-	//	fu := runtime.FuncForPC(pc[i] - 1)
-	//	name := fu.Name()
-	//
-	//	if !strings.Contains(name, "github.com/kafrax/logx") {
-	//		f, l := fu.FileLine(pc[i] - 1)
-	//		return path.Base(f) + "|" + path.Base(name) + "|" + strconv.Itoa(l)
-	//	}
-	//
-	//	if pc, f, l, ok := runtime.Caller(8); ok {
-	//		funcName := runtime.FuncForPC(pc).Name()
-	//		return path.Base(f) + "|" + path.Base(funcName) + "|" + strconv.Itoa(l)
-	//	}
-	//}
-	return ""
+	pc, f, l, _ := runtime.Caller(2)
+	funcName := runtime.FuncForPC(pc).Name()
+	return path.Base(f) + " " + path.Base(funcName) + " " + strconv.Itoa(l)
 }
 
 func print(buf *bytes.Buffer) {
-	switch out {
+	switch gSetOut {
 	case "file":
 		gLogger.bucket <- buf
-	case "stdout":
-		fmt.Print(buf.String())
 	case "kafka": //todo send to kafka etc.
 	case "nsq": //todo send to kafka nsq etc.
-	default:
-		fmt.Println(buf.String())
 	}
+	fmt.Print(buf.String())
 }
 
 func Debugf(format string, msg ... interface{}) {
-	if levelFlag > _DEBUG {
+	if gSetLevel > _DEBUG {
 		return
 	}
 	buf := bufferPoolGet()
@@ -212,7 +163,7 @@ func Debugf(format string, msg ... interface{}) {
 }
 
 func Infof(format string, msg ... interface{}) {
-	if levelFlag > _INFO {
+	if gSetLevel > _INFO {
 		return
 	}
 	buf := bufferPoolGet()
@@ -222,7 +173,7 @@ func Infof(format string, msg ... interface{}) {
 }
 
 func Warnf(format string, msg ... interface{}) {
-	if levelFlag > _WARN {
+	if gSetLevel > _WARN {
 		return
 	}
 	buf := bufferPoolGet()
@@ -232,7 +183,7 @@ func Warnf(format string, msg ... interface{}) {
 }
 
 func Errorf(format string, msg ... interface{}) {
-	if levelFlag > _ERR {
+	if gSetLevel > _ERR {
 		return
 	}
 	buf := bufferPoolGet()
@@ -242,7 +193,7 @@ func Errorf(format string, msg ... interface{}) {
 }
 
 func Fatalf(format string, msg ... interface{}) {
-	if levelFlag > _DISASTER {
+	if gSetLevel > _DISASTER {
 		return
 	}
 	buf := bufferPoolGet()
@@ -262,7 +213,7 @@ func Stackf(format string, msg ... interface{}) {
 }
 
 func Debug(msg ... interface{}) {
-	if levelFlag > _DEBUG {
+	if gSetLevel > _DEBUG {
 		return
 	}
 	buf := bufferPoolGet()
@@ -272,7 +223,7 @@ func Debug(msg ... interface{}) {
 }
 
 func Info(msg ... interface{}) {
-	if levelFlag > _INFO {
+	if gSetLevel > _INFO {
 		return
 	}
 	buf := bufferPoolGet()
@@ -282,7 +233,7 @@ func Info(msg ... interface{}) {
 }
 
 func Warn(msg ... interface{}) {
-	if levelFlag > _WARN {
+	if gSetLevel > _WARN {
 		return
 	}
 	buf := bufferPoolGet()
@@ -292,7 +243,7 @@ func Warn(msg ... interface{}) {
 }
 
 func Error(msg ... interface{}) {
-	if levelFlag > _ERR {
+	if gSetLevel > _ERR {
 		return
 	}
 	buf := bufferPoolGet()
@@ -302,7 +253,7 @@ func Error(msg ... interface{}) {
 }
 
 func Fatal(msg ... interface{}) {
-	if levelFlag > _DISASTER {
+	if gSetLevel > _DISASTER {
 		return
 	}
 	buf := bufferPoolGet()

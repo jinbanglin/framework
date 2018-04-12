@@ -1,3 +1,4 @@
+// moss Endpoint is adapter to all handler middleware filter
 package moss
 
 import (

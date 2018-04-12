@@ -3,19 +3,17 @@ package log
 import (
 	"sync/atomic"
 	"time"
-	"fmt"
 )
 
 func poller() {
 	atomic.SwapUint32(&gLogger.look, uint32(coreRunning))
 	if err := gLogger.loadCurLogFile(); err != nil {
-		fmt.Println()
-		if err = gLogger.createFile(); err != nil {
-			panic(err)
+		if gLogger.createFile() != nil {
+			panic("load file error")
 		}
 	}
 	go gLogger.signalHandler()
-	ticker := time.NewTicker(time.Millisecond * time.Duration(pollInterval))
+	ticker := time.NewTicker(time.Millisecond * time.Duration(gSetPollerInterval))
 	now := time.Now()
 	next := now.Add(time.Hour * 24)
 	next = time.Date(
