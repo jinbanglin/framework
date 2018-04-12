@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/jinbanglin/moss/discovery/etcdv3"
-	"github.com/jinbanglin/moss/kernel/payload"
 	"github.com/jinbanglin/moss/log"
 
 	"github.com/gorilla/mux"
@@ -21,7 +20,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/jinbanglin/moss"
 
-	distributorgrpc "github.com/jinbanglin/moss/distributor/grpc"
+	"github.com/jinbanglin/moss/payload"
 )
 
 var AppServer = &appServer{}
@@ -58,7 +57,7 @@ func (a *appServer) GRPCServerStart() {
 	}
 	log.Info("start at:", addr)
 	baseServer := grpc.NewServer()
-	payload.RegisterInvokingServer(baseServer, distributorgrpc.NewGRPCServer().Scheduler)
+	payload.RegisterInvokingServer(baseServer, gGRPCServer.Scheduler)
 	reflection.Register(baseServer)
 	if err = baseServer.Serve(grpcListener); err != nil {
 		panic(err)
@@ -96,11 +95,11 @@ func (a *appServer) Run() {
 
 func (a *appServer) registerEtcdV3(serverAddr string) {
 	defaultEtcdV3Client().Register(etcdv3.Service{
-		Key:   "/" + a.ServiceName + "/" + a.ConfigManager.EtcdEndPoints.ServerId,
+		Key:   "/" + string(a.ServiceName) + "/" + a.ConfigManager.EtcdEndPoints.ServerId,
 		Value: serverAddr,
 		TTL:   etcdv3.NewTTLOption(0, 0),
 	})
-	log.Infof("register etcd key=%s", "/"+a.ServiceName+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
+	log.Infof("register etcd key=%s", "/"+string(a.ServiceName)+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
 	log.Info("register etcd value", serverAddr)
 }
 
@@ -119,4 +118,3 @@ func (a *appServer) Stop(timeout time.Duration, f ...func()) {
 	RegisterContinueSignal(syscall.SIGTERM, process)
 	RegisterContinueSignal(syscall.SIGINT, process)
 }
-

@@ -4,21 +4,19 @@ import (
 	"context"
 
 	"github.com/jinbanglin/moss"
-	"github.com/jinbanglin/moss/kernel/payload"
+	"github.com/jinbanglin/moss/payload"
+	"github.com/jinbanglin/moss/_example"
+	"github.com/jinbanglin/moss/distributor"
 )
 
 type Endpoints struct {
-	RegisterEndpoint moss.Endpoint
+	SnsEndpoint moss.Endpoint
 }
 
-func MakeServerEndpoints(s Service) Endpoints {
+func MakeServerEndpoints() Endpoints {
 	return Endpoints{
-		RegisterEndpoint: MakeRegisterEndpoint(s),
-	}
-}
-
-func MakeRegisterEndpoint(s Service) moss.Endpoint {
-	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-		return s.Register(ctx, request.(*payload.MossPacket))
+		SnsEndpoint: func(ctx context.Context, request interface{}) (response interface{}, err error) {
+			return distributor.WatcherInvoking(_example.ServiceNameSns, ctx, request.(*payload.MossPacket))
+		},
 	}
 }

@@ -2,7 +2,7 @@
 mode       ="dev"
 version    ="v0.1"
 server_name="apigateway"
-http_prefix="/api/v1"
+http_prefix="/api/v1/open"
 
 [etcdv3]
 etcd_endpoints =["127.0.0.1:2379"]
@@ -19,5 +19,5 @@ addr      ="127.0.0.1:8999"
 route     =""
 
 [[watch]]
-service_name    ="addgrpcsvc"
+service_name    ="sns"
 

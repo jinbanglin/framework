@@ -15,6 +15,7 @@ import (
 	"os"
 	"github.com/jinbanglin/moss"
 	"github.com/jinbanglin/moss/discovery/etcdv3"
+	"time"
 )
 
 type ConnectionType = string

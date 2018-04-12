@@ -1,0 +1,20 @@
+[INFO][04-12.20.31.29.260][app.go distributor.(*appServer).registerEtcdV3 102] register etcd key=/addgrpcsvc/2
+[INFO][04-12.20.31.29.260][app.go distributor.(*appServer).registerEtcdV3 103] register etcd value 127.0.0.1:10002
+[INFO][04-12.20.31.29.261][app.go distributor.(*appServer).GRPCServerStart 58] start at: 127.0.0.1:10002
+[INFO][04-12.20.39.05.675][app.go distributor.(*appServer).registerEtcdV3 102] register etcd key=/sns/2
+[INFO][04-12.20.39.05.675][app.go distributor.(*appServer).registerEtcdV3 103] register etcd value 127.0.0.1:10002
+[INFO][04-12.20.39.05.676][app.go distributor.(*appServer).GRPCServerStart 58] start at: 127.0.0.1:10002
+[INFO][04-12.20.41.43.614][app.go distributor.(*appServer).registerEtcdV3 102] register etcd key=/sns/2
+[INFO][04-12.20.41.43.614][app.go distributor.(*appServer).registerEtcdV3 103] register etcd value 127.0.0.1:10002
+[INFO][04-12.20.41.43.614][app.go distributor.(*appServer).GRPCServerStart 58] start at: 127.0.0.1:10002
+[INFO][04-12.20.42.53.304][app.go distributor.(*appServer).registerEtcdV3 102] register etcd key=/sns/2
+[INFO][04-12.20.42.53.304][app.go distributor.(*appServer).registerEtcdV3 103] register etcd value 127.0.0.1:10002
+[INFO][04-12.20.42.53.304][app.go distributor.(*appServer).GRPCServerStart 58] start at: 127.0.0.1:10002
+[ERRO][04-12.20.43.14.583][scheduler.go grpc.(*GPRCInvoking).Invoking 35] Invoking |request=service_code:900003 payload:"------WebKitFormBoundaryww27QWKfHkfwlJu9--\r\n" client_ip:"127.0.0.1:58956"  |err=readObjectStart: expect { or n, parsing 1 ...-... at ------WebKitFormBoundaryww27QWKfHkfwlJu9--
+[INFO][04-12.20.45.57.367][app.go distributor.(*appServer).registerEtcdV3 102] register etcd key=/sns/2
+[INFO][04-12.20.45.57.367][app.go distributor.(*appServer).registerEtcdV3 103] register etcd value 127.0.0.1:10002
+[INFO][04-12.20.45.57.367][app.go distributor.(*appServer).GRPCServerStart 58] start at: 127.0.0.1:10002
+[INFO][04-12.20.55.47.544][app.go distributor.(*appServer).registerEtcdV3 102] register etcd key=/sns/2
+[INFO][04-12.20.55.47.544][app.go distributor.(*appServer).registerEtcdV3 103] register etcd value 127.0.0.1:10002
+[INFO][04-12.20.55.47.544][app.go distributor.(*appServer).GRPCServerStart 58] start at: 127.0.0.1:10002
+[INFO][04-12.20.56.18.296][register_hdl.go register.RegisterHandler 11] SnsEndpoint

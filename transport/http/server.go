@@ -23,13 +23,13 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	request, err := s.dec(ctx, r)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("dec |request=%v |err=%v",request,err)
 		s.errorEncoder(ctx, request, w)
 		return
 	}
 	response, err := s.e(ctx, request)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("FROM |response=%v |err=%v",response,err)
 		s.errorEncoder(ctx, response, w)
 		return
 	}

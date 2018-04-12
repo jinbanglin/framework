@@ -46,7 +46,7 @@ func (w *Watcher) Watch(config []*Watch) {
 
 func newWatchEndpoint(serviceName moss.ServiceName) (watcher *WatcherEndpoint) {
 	watcher = &WatcherEndpoint{}
-	watcher.etcdInstancer = etcdv3.NewInstancer(defaultEtcdV3Client(), "/"+serviceName)
+	watcher.etcdInstancer = etcdv3.NewInstancer(defaultEtcdV3Client(), "/"+string(serviceName))
 	watcher.factory = func(instance string) (moss.Endpoint, io.Closer, error) {
 		if conn, err := grpc.Dial(instance, grpc.WithInsecure(), grpc.WithBackoffMaxDelay(1*time.Second),
 			grpc.WithDefaultCallOptions(

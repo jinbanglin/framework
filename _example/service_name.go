@@ -4,5 +4,5 @@ import (
 	"github.com/jinbanglin/moss"
 )
 
-var Addgrpcsvc moss.ServiceName = "addgrpcsvc"
-var Apigateway moss.ServiceName = "apigateway"
+var ServiceNameSns moss.ServiceName = "sns"
+var ServiceNameAPIGateway moss.ServiceName = "apigateway"

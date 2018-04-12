@@ -1,15 +1,15 @@
-package distributor
+package grpc
 
 import (
 	"reflect"
 	"github.com/jinbanglin/moss"
-	"github.com/jinbanglin/moss/kernel/payload"
 	"github.com/jinbanglin/moss/log"
 	transportgrpc "github.com/jinbanglin/moss/transport/grpc"
 
 	"github.com/golang/protobuf/proto"
 	context2 "golang.org/x/net/context"
 	"errors"
+	"github.com/jinbanglin/moss/payload"
 )
 
 type SchedulerHandler struct {
@@ -18,7 +18,7 @@ type SchedulerHandler struct {
 }
 
 type GPRCInvoking struct {
-	scheduler map[uint32]*SchedulerHandler
+	Scheduler map[uint32]*SchedulerHandler
 }
 
 func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacket) (response *payload.MossPacket, err error) {
@@ -56,17 +56,17 @@ func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacke
 func AddEndpoint(endpoint moss.Endpoint) transportgrpc.Handler { return transportgrpc.NewServer(endpoint) }
 
 func (s *GPRCInvoking) RegisterHandler(serviceCode uint32, request proto.Message, endpoint moss.Endpoint) {
-	if _, ok := s.scheduler[serviceCode]; ok {
+	if _, ok := s.Scheduler[serviceCode]; ok {
 		panic("handler is already register")
 	}
-	s.scheduler[serviceCode] = &SchedulerHandler{RequestType: reflect.TypeOf(request).Elem(), handler: AddEndpoint(
+	s.Scheduler[serviceCode] = &SchedulerHandler{RequestType: reflect.TypeOf(request).Elem(), handler: AddEndpoint(
 		endpoint,
 	)}
 }
 
 func (s *GPRCInvoking) GetHandler(serviceCode uint32) (handler *SchedulerHandler, err error) {
 	var ok bool
-	if handler, ok = s.scheduler[serviceCode]; !ok {
+	if handler, ok = s.Scheduler[serviceCode]; !ok {
 		log.Error(serviceCode)
 		return nil, errors.New("no service")
 	}

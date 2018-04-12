@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/jinbanglin/moss/kernel/payload"
 	"github.com/jinbanglin/moss/log"
 	httptransport "github.com/jinbanglin/moss/transport/http"
 
@@ -17,6 +16,7 @@ import (
 	"github.com/jinbanglin/moss/auth/moss_jwt"
 	"github.com/json-iterator/go"
 	"github.com/jinbanglin/moss"
+	"github.com/jinbanglin/moss/payload"
 )
 
 type MutilEndpoints struct {
@@ -52,12 +52,12 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 			return moss_jwt.JwtKey, nil
 		})
 	if err != nil || !token.Valid {
-		log.Errorf("decodeHTTPInvokeRequest |token=%v", token)
+		log.Errorf("token=%v", token)
 		ctx = context.WithValue(ctx, http.StatusUnauthorized, true)
 		return response, err
 	}
 	vars := mux.Vars(r)
-	c, ok := vars["service"]
+	c, ok := vars["service_code"]
 	if !ok {
 		return response, errors.New("no protocol")
 	}
@@ -67,7 +67,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 	}
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil || len(b) < 1 {
-		log.Errorf("decodeHTTPInvokeRequest |err=%v |or EOF:%d", err, len(b))
+		log.Errorf("err=%v |or EOF:%d", err, len(b))
 		return response, errors.New("client data error")
 	}
 	response.UserId = token.Claims.(jwtgo.MapClaims)["UserId"].(string)
