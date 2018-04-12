@@ -2,11 +2,6 @@ syntax = "proto3";
 
 package pb;
 
-
-message HelloMoss {
-    string hello_moss = 1;
-}
-
 //===================MOSS REGISTER====================
 //user register
 message RegisterReq {
