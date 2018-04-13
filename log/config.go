@@ -15,15 +15,24 @@ const (
 	_DISASTER
 )
 
+const (
+	B  = 1 << (10 * iota)
+	KB
+	MB
+	GB
+	TB
+	PB
+)
+
 var (
 	coreDead    coreStatus = 2 //gLogger is dead
 	coreBlock   coreStatus = 0 //gLogger is block
 	coreRunning coreStatus = 1 //gLogger is running
 )
 var gSetOut = "file"
-var gSetMaxSize = 256 * 1024 * 1024
+var gSetMaxSize = 256 * MB
 var gSetBucketLen = 1024
-var gSetBufSize = 2 * 1024 * 1024
+var gSetBufSize = 2 * MB
 var gSetFilename = "moss"
 var gSetFilePath = getCurrentDirectory()
 var gSetLevel = _DEBUG
@@ -43,7 +52,7 @@ func setupConfig() {
 		gSetLevel = level(value)
 	}
 	if value := viper.GetInt("log.maxsize"); value > 0 {
-		gSetMaxSize = value
+		gSetMaxSize = value*MB
 	}
 	if value := viper.GetString("log.out"); value != "" {
 		gSetOut = value
