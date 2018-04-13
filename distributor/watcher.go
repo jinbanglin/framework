@@ -60,7 +60,7 @@ func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *Watche
 	}
 	watcher.sdEndPointer = discovery.NewEndpointer(watcher.etcdInstancer, watcher.factory)
 	watcher.lbRoundRobin = lb.NewRoundRobin(watcher.sdEndPointer)
-	watcher.retry = lb.Retry(2, time.Millisecond*100, watcher.lbRoundRobin)
+	watcher.retry = lb.Retry(3, time.Second*1, watcher.lbRoundRobin)
 	watcher.endpoint = watcher.retry
 	return
 }
