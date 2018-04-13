@@ -1,0 +1,57 @@
+[INFO][04-12.20.28.38.049][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{protocol}/1
+[INFO][04-12.20.28.38.049][watcher.go distributor.(*Watcher).Watch 42] watch service name addgrpcsvc
+[INFO][04-12.20.28.38.078][instancer.go etcdv3.NewInstancer 31] prefix=/addgrpcsvc |instances=0
+[INFO][04-12.20.28.38.078][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.28.38.078][http.go http.MakeHTTPGateway 28] run at /api/v1/addgrpcsvc/{service_code}/1
+[INFO][04-12.20.28.38.078][http.go http.MakeHTTPGateway 28] run at /api/v1/addgrpcsvc/{service_code}/1
+[INFO][04-12.20.35.22.155][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{protocol}/1
+[INFO][04-12.20.35.22.157][watcher.go distributor.(*Watcher).Watch 42] watch service name addgrpcsvc
+[INFO][04-12.20.35.22.160][instancer.go etcdv3.NewInstancer 31] prefix=/addgrpcsvc |instances=1
+[INFO][04-12.20.35.22.161][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.35.22.161][http.go http.MakeHTTPGateway 28] run at /api/v1/addgrpcsvc/{service_code}/1
+[INFO][04-12.20.35.22.161][http.go http.MakeHTTPGateway 28] run at /api/v1/addgrpcsvc/{service_code}/1
+[INFO][04-12.20.35.50.347][conf.go distributor.(*ConfigManager).fsnotify.func1 88] config file changed:/Users/gokafrax/go/src/github.com/jinbanglin/moss/_example/apigateway/apigateway.toml
+[INFO][04-12.20.36.00.718][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{protocol}/1
+[INFO][04-12.20.36.00.718][watcher.go distributor.(*Watcher).Watch 42] watch service name sns
+[INFO][04-12.20.36.00.721][instancer.go etcdv3.NewInstancer 31] prefix=/sns |instances=0
+[INFO][04-12.20.36.00.721][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.36.00.721][http.go http.MakeHTTPGateway 28] run at /api/v1/sns/{service_code}/1
+[INFO][04-12.20.36.00.721][http.go http.MakeHTTPGateway 28] run at /api/v1/sns/{service_code}/1
+[INFO][04-12.20.37.46.589][conf.go distributor.(*ConfigManager).fsnotify.func1 88] config file changed:/Users/gokafrax/go/src/github.com/jinbanglin/moss/_example/apigateway/apigateway.toml
+[INFO][04-12.20.37.48.449][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{protocol}/1
+[INFO][04-12.20.37.48.450][watcher.go distributor.(*Watcher).Watch 42] watch service name sns
+[INFO][04-12.20.37.48.455][instancer.go etcdv3.NewInstancer 31] prefix=/sns |instances=0
+[INFO][04-12.20.37.48.456][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.37.48.456][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.37.48.456][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[ERRO][04-12.20.38.18.636][server.go http.Server.ServeHTTP 32] no endpoints available
+[INFO][04-12.20.41.48.517][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.41.48.518][watcher.go distributor.(*Watcher).Watch 42] watch service name sns
+[INFO][04-12.20.41.48.520][instancer.go etcdv3.NewInstancer 31] prefix=/sns |instances=1
+[INFO][04-12.20.41.48.520][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.41.48.520][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.41.48.520][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[ERRO][04-12.20.41.52.458][server.go http.Server.ServeHTTP 26] no protocol
+[INFO][04-12.20.42.49.068][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.42.49.069][watcher.go distributor.(*Watcher).Watch 42] watch service name sns
+[INFO][04-12.20.42.49.072][instancer.go etcdv3.NewInstancer 31] prefix=/sns |instances=0
+[INFO][04-12.20.42.49.072][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.42.49.072][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.42.49.072][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[ERRO][04-12.20.43.14.583][server.go http.Server.ServeHTTP 32] rpc error: code = Unknown desc = readObjectStart: expect { or n, parsing 1 ...-... at ------WebKitFormBoundaryww27QWKfHkfwlJu9--
+[INFO][04-12.20.45.53.648][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.45.53.649][watcher.go distributor.(*Watcher).Watch 42] watch service name sns
+[INFO][04-12.20.45.53.650][instancer.go etcdv3.NewInstancer 31] prefix=/sns |instances=0
+[INFO][04-12.20.45.53.651][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.45.53.651][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.45.53.651][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[ERRO][04-12.20.46.01.582][server.go http.Server.ServeHTTP 26] dec |request=service_code:900003 client_ip:"127.0.0.1:59280"  |err=client data error
+[INFO][04-12.20.55.51.637][transport.go opensvc.MakeOpensvcHTTPHandler 26] HTTP SERVER |json at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.55.51.638][watcher.go distributor.(*Watcher).Watch 42] watch service name sns
+[INFO][04-12.20.55.51.640][instancer.go etcdv3.NewInstancer 31] prefix=/sns |instances=1
+[INFO][04-12.20.55.51.640][app.go distributor.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-12.20.55.51.640][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[INFO][04-12.20.55.51.640][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
+[ERRO][04-12.20.55.56.131][server.go http.Server.ServeHTTP 26] dec |request=service_code:900003 message:<code:40000 msg:"request data error" > client_ip:"127.0.0.1:60525"  |err=client data error
+[INFO][04-12.20.56.18.296][transport.go opensvc.encodeRegisterResponse 74] encodeRegisterResponse |signedKey eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImppbmJhbmdsaW4iLCJVc2VySWQiOiIxMjM0NTY3ODkiLCJhdWQiOiI5ODc2NTQzMjEiLCJleHAiOjE1MjM1ODA5NzgsImp0aSI6IjIwNTYxODEyMzQ1Njc4OSIsImlhdCI6MTUyMzUzNzc3OCwiaXNzIjoiYml4aW5fdXNlciIsIm5iZiI6MTUyMzUzNzc3OCwic3ViIjoiMTIzNDU2Nzg5X2ppbmJhbmdsaW4ifQ.tRpIabW63PaQLtqb35lMoUGmJjj0ZK41UuOnFWiIMFY
+[INFO][04-13.09.38.56.722][transport.go opensvc.MakeOpensvcHTTPHandler 25] HTTP SERVER |json at /api/v1/open/sns/{service_code}/1

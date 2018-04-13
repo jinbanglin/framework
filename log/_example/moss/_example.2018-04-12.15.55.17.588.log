@@ -1,0 +1,5 @@
+[DEBU][04-12.15.55.17.587][main.go main.main 50] substring=log is a lightweight log to use%!(EXTRA string=debugf test)
+[INFO][04-12.15.55.17.588][main.go main.main 51] message=log is a lightweight log to use
+[ERRO][04-12.15.55.17.588][main.go main.main 52] message=log is a lightweight log to use
+[WARN][04-12.15.55.17.588][main.go main.main 53] message=log is a lightweight log to use
+[FTAL][04-12.15.55.17.588][main.go main.main 54] message=log is a lightweight log to use
