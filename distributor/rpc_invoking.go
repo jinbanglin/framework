@@ -23,9 +23,7 @@ type GPRCInvoking struct {
 }
 
 func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacket) (response *payload.MossPacket, err error) {
-	response = &payload.MossPacket{
-		Message: &payload.Message{Code: 50001, Msg: "invoking error"},
-	}
+	response = &payload.MossPacket{MossMessage: payload.StatusText(payload.StatusInternalServerError)}
 	schedulerHandler, err := s.GetHandler(request.ServiceCode)
 	if err != nil {
 		log.Error(err)
@@ -49,7 +47,7 @@ func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacke
 		return response, err
 	}
 	response.Payload = loader
-	response.Message = &payload.Message{Code: 20000, Msg: "SUCCESS"}
+	response.MossMessage=payload.StatusText(payload.StatusOK)
 	response.ServiceCode = request.ServiceCode
 	return response, nil
 }

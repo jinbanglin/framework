@@ -36,12 +36,9 @@ func decodeRegisterRequest(ctx context.Context, r *http.Request) (request interf
 	req := &payload.MossPacket{
 		ServiceCode: 0,
 		Payload:     nil,
-		Message: &payload.Message{
-			Code: 40000,
-			Msg:  "request data error",
-		},
-		UserId:   "",
-		ClientIp: r.RemoteAddr,
+		MossMessage: payload.StatusText(payload.StatusBadRequest),
+		UserId:      "",
+		ClientIp:    r.RemoteAddr,
 	}
 	p, ok := mux.Vars(r)["service_code"]
 	if !ok {

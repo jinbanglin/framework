@@ -42,10 +42,7 @@ func errorEncoder(ctx context.Context, response interface{}, w http.ResponseWrit
 
 func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var response = &payload.MossPacket{
-		Message: &payload.Message{
-			Code: 40001,
-			Msg:  "status unauthorized",
-		},
+		MossMessage: payload.StatusText(payload.StatusUnauthorized),
 	}
 	token, err := request.ParseFromRequest(r, request.AuthorizationHeaderExtractor,
 		func(*jwtgo.Token) (interface{}, error) {
@@ -74,10 +71,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 	response.ServiceCode = uint32(serviceCode)
 	response.Payload = b
 	response.ClientIp = r.RemoteAddr
-	response.Message = &payload.Message{
-		Code: 20000,
-		Msg:  "SUCCESS",
-	}
+	response.MossMessage = payload.StatusText(payload.StatusOK)
 	return response, nil
 }
 
