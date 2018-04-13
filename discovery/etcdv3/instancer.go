@@ -40,7 +40,6 @@ func NewInstancer(c Client, prefix string) (*Instancer) {
 func (s *Instancer) loop() {
 	ch := make(chan struct{})
 	go s.client.WatchPrefix(s.prefix, ch)
-
 	for {
 		select {
 		case <-ch:
@@ -81,7 +80,7 @@ func DefaultEtcdV3Client(address []string) Client {
 		Username:      "",
 		Password:      "",
 		DialTimeout:   time.Second * 10,
-		DialKeepAlive: time.Second * 10,
+		DialKeepAlive: time.Second * 3600,
 	})
 	if err != nil {
 		panic(err)
