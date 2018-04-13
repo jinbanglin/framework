@@ -18,13 +18,9 @@ type Client struct {
 
 func NewClient(cc *grpc.ClientConn, serviceName string, method string, grpcReply interface{}) *Client {
 	return &Client{
-		client: cc,
-		method: fmt.Sprintf("/%s/%s", serviceName, method),
-		grpcReply: reflect.TypeOf(
-			reflect.Indirect(
-				reflect.ValueOf(grpcReply),
-			).Interface(),
-		),
+		client:    cc,
+		method:    fmt.Sprintf("/%s/%s", serviceName, method),
+		grpcReply: reflect.TypeOf(reflect.Indirect(reflect.ValueOf(grpcReply)).Interface()),
 	}
 }
 

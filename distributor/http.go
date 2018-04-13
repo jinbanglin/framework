@@ -25,7 +25,7 @@ type MutilEndpoints struct {
 
 func MakeHTTPGateway(r *mux.Router, endpoints MutilEndpoints, serviceId string) http.Handler {
 	for k, v := range endpoints.Endpoints {
-		log.Info("run at", k+serviceId)
+		log.Info("route at", k+serviceId)
 		r.Methods("POST").Path(k + serviceId).Handler(httptransport.NewServer(
 			v,
 			decodeHTTPInvokeRequest,

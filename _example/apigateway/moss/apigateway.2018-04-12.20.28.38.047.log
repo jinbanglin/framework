@@ -54,3 +54,4 @@
 [INFO][04-12.20.55.51.640][http.go http.MakeHTTPGateway 28] run at /api/v1/open/sns/{service_code}/1
 [ERRO][04-12.20.55.56.131][server.go http.Server.ServeHTTP 26] dec |request=service_code:900003 message:<code:40000 msg:"request data error" > client_ip:"127.0.0.1:60525"  |err=client data error
 [INFO][04-12.20.56.18.296][transport.go opensvc.encodeRegisterResponse 74] encodeRegisterResponse |signedKey eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImppbmJhbmdsaW4iLCJVc2VySWQiOiIxMjM0NTY3ODkiLCJhdWQiOiI5ODc2NTQzMjEiLCJleHAiOjE1MjM1ODA5NzgsImp0aSI6IjIwNTYxODEyMzQ1Njc4OSIsImlhdCI6MTUyMzUzNzc3OCwiaXNzIjoiYml4aW5fdXNlciIsIm5iZiI6MTUyMzUzNzc3OCwic3ViIjoiMTIzNDU2Nzg5X2ppbmJhbmdsaW4ifQ.tRpIabW63PaQLtqb35lMoUGmJjj0ZK41UuOnFWiIMFY
+[INFO][04-13.09.38.56.722][transport.go opensvc.MakeOpensvcHTTPHandler 25] HTTP SERVER |json at /api/v1/open/sns/{service_code}/1

@@ -1,0 +1,5 @@
+[INFO][04-13.09.38.56.722][watcher.go distributor.(*Watcher).Watch 41] watch service name sns
+[INFO][04-13.09.38.56.765][instancer.go etcdv3.NewInstancer 34] prefix=/sns |instances=0
+[INFO][04-13.09.38.56.765][moss.go moss.(*appServer).HTTPTLSGatewayStart 71] start at: 127.0.0.1:8000
+[INFO][04-13.09.38.56.765][http.go distributor.MakeHTTPGateway 28] route at /api/v1/open/sns/{service_code}/1
+[INFO][04-13.09.38.56.765][http.go distributor.MakeHTTPGateway 28] route at /api/v1/open/sns/{service_code}/1

@@ -8,6 +8,9 @@ import (
 	"github.com/jinbanglin/moss/log"
 )
 
+type DecodeRequestFunc func(context.Context, *http.Request) (request interface{}, err error)
+type EncodeResponseFunc func(context.Context, http.ResponseWriter, interface{}) error
+
 type Server struct {
 	e            endpoint.Endpoint
 	dec          DecodeRequestFunc
