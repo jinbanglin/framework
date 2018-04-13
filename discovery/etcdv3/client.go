@@ -103,13 +103,14 @@ func NewClient(ctx context.Context, machines []string, options ClientOptions) (C
 	}
 
 	cli, err := clientv3.New(clientv3.Config{
-		Context:           ctx,
-		Endpoints:         machines,
-		DialTimeout:       options.DialTimeout,
-		DialKeepAliveTime: options.DialKeepAlive,
-		TLS:               tlscfg,
-		Username:          options.Username,
-		Password:          options.Password,
+		Context:              ctx,
+		Endpoints:            machines,
+		DialTimeout:          options.DialTimeout,
+		DialKeepAliveTimeout: time.Millisecond * 500,
+		DialKeepAliveTime:    options.DialKeepAlive,
+		TLS:                  tlscfg,
+		Username:             options.Username,
+		Password:             options.Password,
 	})
 	if err != nil {
 		return nil, err

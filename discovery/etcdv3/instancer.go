@@ -80,7 +80,7 @@ func DefaultEtcdV3Client(address []string) Client {
 		Username:      "",
 		Password:      "",
 		DialTimeout:   time.Second * 10,
-		DialKeepAlive: time.Second * 10,
+		DialKeepAlive: time.Second * 3,
 	})
 	if err != nil {
 		panic(err)
