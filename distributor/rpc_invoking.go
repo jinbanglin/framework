@@ -23,6 +23,7 @@ type GPRCInvoking struct {
 }
 
 func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacket) (*payload.MossPacket, error) {
+	log.Infof("MOSS |RPC |FROM |request=%v", request)
 	response := &payload.MossPacket{MossMessage: payload.StatusText(payload.StatusInternalServerError)}
 	schedulerHandler, err := s.GetHandler(request.ServiceCode)
 	if err != nil {
@@ -48,6 +49,7 @@ func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacke
 	response.Payload = loader
 	response.MossMessage = payload.StatusText(payload.StatusOK)
 	response.ServiceCode = request.ServiceCode
+	log.Infof("MOSS |RPC |TO |response=%v", response)
 	return response, nil
 }
 
@@ -65,7 +67,7 @@ func (s *GPRCInvoking) RegisterHandler(serviceCode uint32, request proto.Message
 func (s *GPRCInvoking) GetHandler(serviceCode uint32) (handler *SchedulerHandler, err error) {
 	var ok bool
 	if handler, ok = s.Scheduler[serviceCode]; !ok {
-		log.Error("MOSS |no service code=",serviceCode)
+		log.Error("MOSS |no service code=", serviceCode)
 		return nil, errors.New("no service")
 	}
 	return

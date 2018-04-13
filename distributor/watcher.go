@@ -60,12 +60,15 @@ func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *Watche
 	}
 	watcher.sdEndPointer = discovery.NewEndpointer(watcher.etcdInstancer, watcher.factory)
 	watcher.lbRoundRobin = lb.NewRoundRobin(watcher.sdEndPointer)
-	watcher.retry = lb.Retry(1, time.Millisecond*100, watcher.lbRoundRobin)
+	watcher.retry = lb.Retry(2, time.Millisecond*100, watcher.lbRoundRobin)
 	watcher.endpoint = watcher.retry
 	return
 }
 
 func WatcherInvoking(serviceName string, ctx context.Context, request *payload.MossPacket) (*payload.MossPacket, error) {
 	response, err := WatcherInstance().watchers[serviceName].endpoint(ctx, request)
+	if response == nil {
+		response = &payload.MossPacket{MossMessage: payload.StatusText(payload.StatusGatewayTimeout)}
+	}
 	return response.(*payload.MossPacket), err
 }
