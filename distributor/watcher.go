@@ -47,11 +47,7 @@ func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *Watche
 	watcher = &WatcherEndpoint{}
 	watcher.etcdInstancer = etcdv3.NewInstancer(etcdv3.DefaultEtcdV3Client(etcdAddress), "/"+string(serviceName))
 	watcher.factory = func(instance string) (endpoint.Endpoint, io.Closer, error) {
-		if conn, err := grpc.Dial(instance, grpc.WithInsecure(), grpc.WithBackoffMaxDelay(1*time.Second),
-			grpc.WithDefaultCallOptions(
-				grpc.MaxCallRecvMsgSize(64<<20),
-				grpc.MaxCallSendMsgSize(64<<20),
-			)); err != nil {
+		if conn, err := grpc.Dial(instance, grpc.WithInsecure()); err != nil {
 			log.Error("MOSS |err=", err)
 			return nil, nil, err
 		} else {
