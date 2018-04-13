@@ -31,7 +31,7 @@ func NewInstancer(c Client, prefix string) (*Instancer) {
 	if err != nil {
 		panic(err)
 	}
-	log.Infof("prefix=%s |instances=%d", s.prefix, len(instances))
+	log.Infof("MOSS |prefix=%s |instances=%d", s.prefix, len(instances))
 	s.cache.Update(discovery.Event{Instances: instances, Err: err})
 	go s.loop()
 	return s
@@ -46,7 +46,7 @@ func (s *Instancer) loop() {
 		case <-ch:
 			instances, err := s.client.GetEntries(s.prefix)
 			if err != nil {
-				log.Errorf("Etcdv3 |loop |msg=%s |err=%v", "failed to retrieve entries", err)
+				log.Errorf("MOSS |Etcdv3 |loop |msg=%s |err=%v", "failed to retrieve entries", err)
 				s.cache.Update(discovery.Event{Err: err})
 				continue
 			}

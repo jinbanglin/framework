@@ -38,7 +38,7 @@ func WatcherInstance() *Watcher {
 
 func (w *Watcher) Watch(services, etcdAddress []string) {
 	for _, v := range services {
-		log.Info("watch service name", v)
+		log.Info("MOSS |watch service name", v)
 		w.watchers[v] = newWatchEndpoint(v, etcdAddress)
 	}
 }
@@ -52,7 +52,7 @@ func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *Watche
 				grpc.MaxCallRecvMsgSize(64<<20),
 				grpc.MaxCallSendMsgSize(64<<20),
 			)); err != nil {
-			log.Error(err)
+			log.Error("MOSS |err=", err)
 			return nil, nil, err
 		} else {
 			return NewGRPCClient(conn), conn, nil
@@ -65,10 +65,7 @@ func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *Watche
 	return
 }
 
-func WatcherInvoking(serviceName string, ctx context.Context, request *payload.MossPacket) (response *payload.MossPacket, error error) {
-	if ret, err := WatcherInstance().watchers[serviceName].endpoint(ctx, request); err != nil {
-		return nil, err
-	} else {
-		return ret.(*payload.MossPacket), nil
-	}
+func WatcherInvoking(serviceName string, ctx context.Context, request *payload.MossPacket) (*payload.MossPacket, error) {
+	response, err := WatcherInstance().watchers[serviceName].endpoint(ctx, request)
+	return response.(*payload.MossPacket), err
 }

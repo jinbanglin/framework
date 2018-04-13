@@ -2,6 +2,8 @@ package grpc
 
 import (
 	"github.com/jinbanglin/moss/endpoint"
+	"github.com/jinbanglin/moss/log"
+
 	"context"
 )
 
@@ -16,5 +18,10 @@ type Server struct {
 func NewServer(e endpoint.Endpoint) *Server { return &Server{e: e} }
 
 func (s Server) ServeGRPC(ctx context.Context, req interface{}) (response interface{}, err error) {
-	return s.e(ctx, req)
+	response, err = s.e(ctx, req)
+	if err != nil {
+		log.Errorf("MOSS |err=%v", err)
+		return
+	}
+	return response, nil
 }

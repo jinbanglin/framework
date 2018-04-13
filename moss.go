@@ -55,7 +55,7 @@ func (a *appServer) GRPCServerStart() {
 	if err != nil {
 		panic(err)
 	}
-	log.Info("start at:", addr)
+	log.Info("MOSS |start at:", addr)
 	baseServer := grpc.NewServer()
 	payload.RegisterInvokingServer(baseServer, distributor.GGRPCServer.Scheduler)
 	reflection.Register(baseServer)
@@ -68,7 +68,7 @@ func (a *appServer) HTTPTLSGatewayStart(r *mux.Router) {
 	distributor.WatcherInstance().Watch(a.GetWatchNames(), a.EtcdEndPoints.EtcdEndpoints)
 	gateway := distributor.NewHTTPGateway()
 	gateway.LoadBalancing(distributor.WatcherInstance())
-	log.Info("start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
+	log.Info("MOSS |start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
 	r.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Hello Secure World")
 	})
@@ -99,8 +99,8 @@ func (a *appServer) registerEtcdV3(serverAddr string, etcdAddress []string) {
 		Value: serverAddr,
 		TTL:   etcdv3.NewTTLOption(0, 0),
 	})
-	log.Infof("register etcd key=%s", "/"+string(a.ServiceName)+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
-	log.Info("register etcd value", serverAddr)
+	log.Infof("MOSS |register etcd key=%s", "/"+string(a.ServiceName)+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
+	log.Info("MOSS |register etcd value", serverAddr)
 }
 
 func (a *appServer) Stop(timeout time.Duration, f ...func()) {
@@ -108,7 +108,7 @@ func (a *appServer) Stop(timeout time.Duration, f ...func()) {
 	process := func() {
 		defer a.wait.Done()
 		time.AfterFunc(timeout, func() {
-			log.Info("server stop", "server_id", a.EtcdEndPoints.ServerId, "server_name", a.ServiceName)
+			log.Info("MOSS |server stop", "server_id", a.EtcdEndPoints.ServerId, "server_name", a.ServiceName)
 		})
 		for _, v := range f {
 			v()

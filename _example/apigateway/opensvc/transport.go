@@ -22,7 +22,7 @@ import (
 
 func MakeOpensvcHTTPHandler() *mux.Router {
 	var r, e = mux.NewRouter(), MakeServerEndpoints()
-	log.Info("HTTP SERVER |json at", "/api/v1/open/sns/{service_code}/"+viper.GetString("etcdv3.server_id"))
+	log.Info("MOSS |http server run |", "/api/v1/open/sns/{service_code}/"+viper.GetString("etcdv3.server_id"))
 	r.Methods("POST").Path("/api/v1/open/sns/{service_code}/" + viper.GetString("etcdv3.server_id")).Handler(mosshttp.NewServer(
 		e.SnsEndpoint,
 		decodeRegisterRequest,
@@ -67,7 +67,7 @@ func encodeRegisterResponse(_ context.Context, w http.ResponseWriter, response i
 	if err != nil {
 		return err
 	}
-	log.Info("encodeRegisterResponse |signedKey", signedKey)
+	log.Info("MOSS |encodeRegisterResponse |signedKey", signedKey)
 	w.Header().Set("Authorization", "Bearer "+signedKey)
 	return jsoniter.NewEncoder(w).Encode(ret)
 }

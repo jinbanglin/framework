@@ -84,7 +84,7 @@ func (c *endpointCache) updateCache(instances []string) {
 		// If it doesn't exist, create it.
 		service, closer, err := c.factory(instance)
 		if err != nil {
-			log.Info("instance", instance, "err", err)
+			log.Info("MOSS |instance", instance, "err", err)
 			continue
 		}
 		cache[instance] = endpointCloser{service, closer}

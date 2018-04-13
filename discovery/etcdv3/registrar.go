@@ -65,13 +65,13 @@ func NewRegistrar(client Client, service Service, logger log.Logger) *Registrar 
 // service to be registered in etcd, typically at startup.
 func (r *Registrar) Register() {
 	if err := r.client.Register(r.service); err != nil {
-		log.Error(err)
+		log.Error("MOSS |err=",err)
 		return
 	}
 	if r.service.TTL != nil {
-		log.Infof("discovery |register |lease=%d", r.client.LeaseID())
+		log.Infof("MOSS |discovery |register |lease=%d", r.client.LeaseID())
 	} else {
-		log.Info("discovery |register")
+		log.Info("MOSS |discovery |register")
 	}
 }
 
@@ -79,9 +79,9 @@ func (r *Registrar) Register() {
 // service to be deregistered from etcd, typically just prior to shutdown.
 func (r *Registrar) Deregister() {
 	if err := r.client.Deregister(r.service); err != nil {
-		log.Error(err)
+		log.Error("MOSS |err=",err)
 	} else {
-		log.Info("Deregister")
+		log.Info("MOSS |Deregister")
 	}
 	r.quitMtx.Lock()
 	defer r.quitMtx.Unlock()
