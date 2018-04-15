@@ -8,7 +8,7 @@ import (
 	"github.com/jinbanglin/moss/log"
 	transportgrpc "github.com/jinbanglin/moss/transport/grpc"
 
-	"github.com/golang/protobuf/proto"
+	"github.com/gogo/protobuf/proto"
 	"github.com/jinbanglin/moss/payload"
 	context2 "golang.org/x/net/context"
 )

@@ -2,17 +2,25 @@ syntax = "proto3";
 
 package payload;
 
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/lyft/protoc-gen-validate/validate/validate.proto";
+
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.goproto_getters_all) = true;
+
 service Invoking {
     rpc Invoking (MossPacket) returns (MossPacket) {
     }
 }
 
 message MossPacket {
-    uint32 service_code = 1; // communicate by protocol
-    bytes payload = 2; // payload json or protobuf
+    uint32 service_code = 1 [(validate.rules).uint32.gt = 10000]; // communicate by protocol
+    bytes payload = 2 [(validate.rules).bytes.min_len = 1]; // payload json or protobuf
     MossMessage moss_message = 3;
-    string user_id=4;
-    string client_ip=5;
+    string user_id = 4;
+    string client_ip = 5;
 }
 
 message MossMessage {

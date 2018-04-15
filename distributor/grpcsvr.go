@@ -1,7 +1,7 @@
 package distributor
 
 import (
-	"github.com/golang/protobuf/proto"
+	"github.com/gogo/protobuf/proto"
 	"github.com/jinbanglin/moss/endpoint"
 )
 
