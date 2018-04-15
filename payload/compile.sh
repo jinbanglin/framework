@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 # Install proto3 from source
 #  brew install autoconf automake libtool
@@ -9,5 +10,17 @@
 #
 # See also
 #  https://github.com/grpc/grpc-go/tree/master/examples
+# Install protoc-gen-validate
+# go get -u github.com/lyft/protoc-gen-validate
+# cd $GOPATH/src/github.com/lyft/protoc-gen-validate
+# make
+# will installs PGV into $GOPATH/bin
 
-protoc *.proto --go_out=plugins=grpc:.
+
+for item in $@ ; do
+		if [[ "$item" == "-vl" ]]; then
+			protoc -I $GOPATH/src/github.com/lyft/protoc-gen-validate -I. --go_out=. --validate_out=lang=go:. *.proto
+		else
+		    protoc *.proto --go_out=plugins=grpc:.
+        fi
+done
