@@ -15,12 +15,12 @@
 # cd $GOPATH/src/github.com/lyft/protoc-gen-validate
 # make
 # will installs PGV into $GOPATH/bin
+# must `import "validate/validate.proto";` in your *.proto
 
-
-for item in $@ ; do
-		if [[ "$item" == "-vl" ]]; then
-			protoc -I $GOPATH/src/github.com/lyft/protoc-gen-validate -I. --go_out=. --validate_out=lang=go:. *.proto
+for args in $@ ; do
+		if [[ "$args" == "-vl" ]]; then
+			protoc -I $GOPATH/src/github.com/lyft/protoc-gen-validate -I. --go_out=../generated  --validate_out=lang=go:../generated *.proto
 		else
-		    protoc *.proto --go_out=plugins=grpc:.
+		    protoc *.proto --go_out=plugins=grpc:../generated
         fi
 done
