@@ -60,7 +60,7 @@ func (m *MossPacket) Validate() error {
 	}); ok {
 		if err := v.Validate(); err != nil {
 			return MossPacketValidationError{
-				Field:  "✨MOSS✨Message",
+				Field:  "MossMessage",
 				Reason: "embedded message failed validation",
 				Cause:  err,
 			}

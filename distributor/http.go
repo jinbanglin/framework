@@ -50,7 +50,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 		})
 	if err != nil || !token.Valid {
 		log.Errorf("✨MOSS✨ |token=%v", token)
-		ctx = context.WithValue(ctx, http.StatusUnauthorized, true)
+		ctx = context.WithValue(ctx, payload.StatusUnauthorized, true)
 		return response, err
 	}
 	vars := mux.Vars(r)
