@@ -9,7 +9,7 @@ import (
 
 	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/moss/log"
-	httptransport "github.com/jinbanglin/moss/transport/http"
+	mosshttp "github.com/jinbanglin/moss/transport/http"
 
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
@@ -23,10 +23,10 @@ type MutilEndpoints struct {
 	Endpoints map[string]endpoint.Endpoint
 }
 
-func MakeHTTPGateway(r *mux.Router, endpoints MutilEndpoints, serviceId string) http.Handler {
+func MakeHTTPGateway(r *mux.Router, endpoints MutilEndpoints) http.Handler {
 	for k, v := range endpoints.Endpoints {
-		log.Info("MOSS |route at", k+serviceId)
-		r.Methods("POST").Path(k + serviceId).Handler(httptransport.NewServer(
+		log.Infof("✨MOSS✨ |gateway route at=%s", k)
+		r.Methods("POST").Path(k).Handler(mosshttp.NewServer(
 			v,
 			decodeHTTPInvokeRequest,
 			encodeHTTPGenericResponse,
@@ -49,7 +49,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 			return moss_jwt.JwtKey, nil
 		})
 	if err != nil || !token.Valid {
-		log.Errorf("MOSS |token=%v", token)
+		log.Errorf("✨MOSS✨ |token=%v", token)
 		ctx = context.WithValue(ctx, http.StatusUnauthorized, true)
 		return response, err
 	}
@@ -60,13 +60,13 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 	}
 	serviceCode, err := strconv.Atoi(c)
 	if err != nil {
-		log.Error("MOSS |err=",err)
+		log.Error("✨MOSS✨ |err=", err)
 		return response, err
 	}
 	b, err := ioutil.ReadAll(r.Body)
-	if err != nil || len(b) < 1 {
-		log.Errorf("MOSS |err=%v |or EOF:%d", err, len(b))
-		return response, errors.New("client data error")
+	if err != nil {
+		log.Errorf("✨MOSS✨ |err=%v ", err)
+		return response, err
 	}
 	response.UserId = token.Claims.(jwtgo.MapClaims)["UserId"].(string)
 	response.ServiceCode = uint32(serviceCode)

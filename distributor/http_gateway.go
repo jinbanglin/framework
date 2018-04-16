@@ -10,40 +10,40 @@ import (
 	"github.com/spf13/viper"
 )
 
-type HttpGateway struct {
+type HTTPGateway struct {
 	cache       map[string]string
 	proxyServer MutilEndpoints
 	prefix      string
 }
 
-func NewHTTPGateway() *HttpGateway {
-	return &HttpGateway{
+func NewHTTPGateway() *HTTPGateway {
+	return &HTTPGateway{
 		cache: make(map[string]string),
 		proxyServer: MutilEndpoints{
 			Endpoints: make(map[string]endpoint.Endpoint),
 		},
-		prefix: viper.GetString("server.http_prefix"),
+		prefix: viper.GetString("server.prefix"),
 	}
 }
 
-func (h *HttpGateway) LoadBalancing(watcher *Watcher) {
+func (h *HTTPGateway) LoadBalancing(watcher *Watcher) {
 	for k, v := range WatcherInstance().watchers {
 		h.proxyServer.Endpoints[h.getHostHeader(k)] = v.endpoint
 	}
 }
 
-func (h *HttpGateway) getHostHeader(name string) string {
+func (h *HTTPGateway) getHostHeader(name string) string {
 	if strings.HasPrefix(h.prefix, "/") {
 		h.prefix = strings.TrimPrefix(h.prefix, "/")
 	}
-	format := "/%s/%s/{service_code}/"
+	format := "/%s/%s/{service_code}"
 	return fmt.Sprintf(format, h.prefix, name)
 }
 
-func (h *HttpGateway) GetServiceTpl(name string) string {
+func (h *HTTPGateway) GetServiceTpl(name string) string {
 	return h.cache[name]
 }
 
-func (h *HttpGateway) MakeHttpHandle(r *mux.Router, serverId string) http.Handler {
-	return MakeHTTPGateway(r, h.proxyServer, serverId)
+func (h *HTTPGateway) MakeHttpHandle(r *mux.Router) http.Handler {
+	return MakeHTTPGateway(r, h.proxyServer)
 }

@@ -38,7 +38,7 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 type MossPacket struct {
 	ServiceCode uint32       `protobuf:"varint,1,opt,name=service_code,json=serviceCode,proto3" json:"service_code,omitempty"`
 	Payload     []byte       `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
-	MossMessage *MossMessage `protobuf:"bytes,3,opt,name=moss_message,json=mossMessage" json:"moss_message,omitempty"`
+	MossMessage *MossMessage `protobuf:"bytes,3,opt,name=moss_message,json=mossMessage" json:"✨MOSS✨_message,omitempty"`
 	UserId      string       `protobuf:"bytes,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	ClientIp    string       `protobuf:"bytes,5,opt,name=client_ip,json=clientIp,proto3" json:"client_ip,omitempty"`
 }
