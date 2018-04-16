@@ -56,7 +56,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 	vars := mux.Vars(r)
 	c, ok := vars["service_code"]
 	if !ok {
-		return response, errors.New("no protocol")
+		return response, errors.New("no service_code")
 	}
 	serviceCode, err := strconv.Atoi(c)
 	if err != nil {
