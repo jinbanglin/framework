@@ -78,8 +78,9 @@ func (a *appServer) AddFileSvc(r *mux.Router) {
 				panic(err)
 			}
 		}
-		log.Infof("MOSS |file service route at=%s", fileSvc)
-		r.PathPrefix(fileSvc).Handler(http.StripPrefix(fileSvc, http.FileServer(http.Dir(viper.GetString("server.dir")))))
+		log.Infof("MOSS |file service route at=%s", "/web/")
+		log.Infof("MOSS |file service file dir is=%s", fileSvc)
+		r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir(fileSvc))))
 	}
 }
 
@@ -124,7 +125,7 @@ func (a *appServer) registerEtcdV3(serverAddr string, etcdAddress []string) {
 	etcdv3.DefaultEtcdV3Client(etcdAddress).Register(etcdv3.Service{
 		Key:   "/" + string(a.ServiceName) + "/" + a.ConfigManager.EtcdEndPoints.ServerId,
 		Value: serverAddr,
-		TTL:   etcdv3.NewTTLOption(0, 0),
+		TTL:   etcdv3.NewTTLOption(3, 20),
 	})
 	log.Infof("MOSS |register etcd key=%s", "/"+string(a.ServiceName)+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
 	log.Info("MOSS |register etcd value", serverAddr)

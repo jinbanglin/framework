@@ -77,6 +77,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 }
 
 func encodeHTTPGenericResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+	log.Info(" |FROM |response=",response)
 	w.Write(response.(*payload.MossPacket).Payload)
 	return nil
 }
