@@ -38,7 +38,7 @@ func WatcherInstance() *Watcher {
 
 func (w *Watcher) Watch(services, etcdAddress []string) {
 	for _, v := range services {
-		log.Info("✨MOSS✨ |watch ", v)
+		log.Info("MOSS |watch ", v)
 		w.watchers[v] = newWatchEndpoint(v, etcdAddress)
 	}
 }
@@ -48,7 +48,7 @@ func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *Watche
 	watcher.etcdInstancer = etcdv3.NewInstancer(etcdv3.DefaultEtcdV3Client(etcdAddress), "/"+string(serviceName))
 	watcher.factory = func(instance string) (endpoint.Endpoint, io.Closer, error) {
 		if conn, err := grpc.Dial(instance, grpc.WithInsecure()); err != nil {
-			log.Error("✨MOSS✨ |err=", err)
+			log.Error("MOSS |err=", err)
 			return nil, nil, err
 		} else {
 			return NewGRPCClient(conn), conn, nil

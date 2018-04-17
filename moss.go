@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"syscall"
@@ -13,6 +14,7 @@ import (
 	"github.com/jinbanglin/moss/discovery/etcdv3"
 	"github.com/jinbanglin/moss/distributor"
 	"github.com/jinbanglin/moss/log"
+	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 
 	"github.com/gorilla/mux"
@@ -56,7 +58,7 @@ func (a *appServer) GRPCServerStart() {
 	if err != nil {
 		panic(err)
 	}
-	log.Info("✨MOSS✨ |start at:", addr)
+	log.Info("MOSS |start at:", addr)
 	baseServer := grpc.NewServer()
 	payload.RegisterInvokingServer(baseServer, distributor.GGRPCServer.Scheduler)
 	reflection.Register(baseServer)
@@ -67,8 +69,16 @@ func (a *appServer) GRPCServerStart() {
 
 func (a *appServer) AddFileSvc(r *mux.Router) {
 	//r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("/root/data/view/"))))
-	if fileSvc := viper.GetString("server.static"); strings.Count(fileSvc, "") > 0 {
-		log.Infof("✨MOSS✨ |file service route at=%s", fileSvc)
+	if fileSvc := viper.GetString("server.vf_dir"); strings.Count(fileSvc, "") > 0 {
+		fs := afero.NewOsFs()
+		stat, err := fs.Stat(fileSvc)
+		if err != nil || !stat.IsDir() {
+			log.Info(" |Stat |err=", err)
+			if err = fs.MkdirAll(fileSvc, os.ModePerm); err != nil {
+				panic(err)
+			}
+		}
+		log.Infof("MOSS |file service route at=%s", fileSvc)
 		r.PathPrefix(fileSvc).Handler(http.StripPrefix(fileSvc, http.FileServer(http.Dir(viper.GetString("server.dir")))))
 	}
 }
@@ -86,12 +96,12 @@ func (a *appServer) AddHTTPServer(r *mux.Router, gateway *distributor.HTTPGatewa
 	r.HandleFunc("/moss", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "🔥 MOSS 🔥")
 	})
-	log.Info("✨MOSS✨ |http start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
+	log.Info("MOSS |http start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
 	go log.Debug(http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r)))
 }
 
 func (a *appServer) AddTLSServer(r *mux.Router, gateway *distributor.HTTPGateway) {
-	log.Info("✨MOSS✨ |https start at:", ":443")
+	log.Info("MOSS |https start at:", ":443")
 	certManager := autocert.Manager{
 		Prompt: autocert.AcceptTOS,
 		Cache:  autocert.DirCache("certs"),
@@ -116,8 +126,8 @@ func (a *appServer) registerEtcdV3(serverAddr string, etcdAddress []string) {
 		Value: serverAddr,
 		TTL:   etcdv3.NewTTLOption(0, 0),
 	})
-	log.Infof("✨MOSS✨ |register etcd key=%s", "/"+string(a.ServiceName)+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
-	log.Info("✨MOSS✨ |register etcd value", serverAddr)
+	log.Infof("MOSS |register etcd key=%s", "/"+string(a.ServiceName)+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
+	log.Info("MOSS |register etcd value", serverAddr)
 }
 
 func (a *appServer) Stop(timeout time.Duration, f ...func()) {
@@ -125,7 +135,7 @@ func (a *appServer) Stop(timeout time.Duration, f ...func()) {
 	process := func() {
 		defer a.wait.Done()
 		time.AfterFunc(timeout, func() {
-			log.Info("✨MOSS✨ |server stop", "server_id", a.EtcdEndPoints.ServerId, "server_name", a.ServiceName)
+			log.Info("MOSS |server stop", "server_id", a.EtcdEndPoints.ServerId, "server_name", a.ServiceName)
 		})
 		for _, v := range f {
 			v()

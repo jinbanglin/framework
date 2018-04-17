@@ -25,7 +25,7 @@ type MutilEndpoints struct {
 
 func MakeHTTPGateway(r *mux.Router, endpoints MutilEndpoints) http.Handler {
 	for k, v := range endpoints.Endpoints {
-		log.Infof("✨MOSS✨ |gateway route at=%s", k)
+		log.Infof("MOSS |gateway route at=%s", k)
 		r.Methods("POST").Path(k).Handler(mosshttp.NewServer(
 			v,
 			decodeHTTPInvokeRequest,
@@ -49,7 +49,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 			return moss_jwt.JwtKey, nil
 		})
 	if err != nil || !token.Valid {
-		log.Errorf("✨MOSS✨ |token=%v", token)
+		log.Errorf("MOSS |token=%v", token)
 		ctx = context.WithValue(ctx, payload.StatusUnauthorized, true)
 		return response, err
 	}
@@ -60,12 +60,12 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 	}
 	serviceCode, err := strconv.Atoi(c)
 	if err != nil {
-		log.Error("✨MOSS✨ |err=", err)
+		log.Error("MOSS |err=", err)
 		return response, err
 	}
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Errorf("✨MOSS✨ |err=%v ", err)
+		log.Errorf("MOSS |err=%v ", err)
 		return response, err
 	}
 	response.UserId = token.Claims.(jwtgo.MapClaims)["UserId"].(string)

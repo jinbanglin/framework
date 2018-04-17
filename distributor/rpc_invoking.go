@@ -23,33 +23,29 @@ type GPRCInvoking struct {
 }
 
 func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacket) (*payload.MossPacket, error) {
-	log.Infof("✨MOSS✨ |RPC |FROM |request=%v", request)
+	log.Infof("MOSS |RPC |FROM |request=%v", request)
 	response := &payload.MossPacket{MossMessage: payload.StatusText(payload.StatusInternalServerError)}
 	schedulerHandler, err := s.GetHandler(request.ServiceCode)
 	if err != nil {
-		log.Errorf("✨MOSS✨ |GetHandler |err=%v |response=%v", err, response)
-		return response, err
+		log.Errorf("MOSS |GetHandler |err=%v |response=%v", err, response)
+		return response, nil
 	}
 	req := reflect.New(schedulerHandler.RequestType).Interface().(proto.Message)
 	if err = payload.GetCodec(request.ServiceCode).Unmarshal(request.Payload, req); err != nil {
-		log.Errorf("✨MOSS✨ |request=%v |err=%v", request, err)
-		return response, err
+		log.Errorf("MOSS |request=%v |err=%v", request, err)
+		return response, nil
 	}
 	ctx = context2.WithValue(ctx, "user_id", request.UserId)
 	ctx = context2.WithValue(ctx, "client_ip", request.ClientIp)
 	res, err := schedulerHandler.handler.ServeGRPC(ctx, req)
-	if err != nil {
-		log.Errorf("✨MOSS✨ |res=%v |err=%v", res, err)
-	}
-	loader, err := payload.GetCodec(request.ServiceCode).Marshal(res.(proto.Message))
-	if err != nil {
-		log.Errorf("✨MOSS✨ |res=%v |err=%v", res, err)
-		return response, err
-	}
-	response.Payload = loader
-	response.MossMessage = payload.StatusText(payload.StatusOK)
+	response.Payload = payload.GetCodec(request.ServiceCode).Marshal(res.(proto.Message))
 	response.ServiceCode = request.ServiceCode
-	log.Infof("✨MOSS✨ |RPC |TO |response=%v", response)
+	if err != nil {
+		log.Errorf("MOSS |res=%v |err=%v", response, err)
+		return response, nil
+	}
+	response.MossMessage = payload.StatusText(payload.StatusOK)
+	log.Infof("MOSS |RPC |TO |response=%v", response)
 	return response, nil
 }
 
@@ -67,7 +63,7 @@ func (s *GPRCInvoking) RegisterHandler(serviceCode uint32, request proto.Message
 func (s *GPRCInvoking) GetHandler(serviceCode uint32) (handler *SchedulerHandler, err error) {
 	var ok bool
 	if handler, ok = s.Scheduler[serviceCode]; !ok {
-		log.Error("✨MOSS✨ |no service code=", serviceCode)
+		log.Error("MOSS |no service code=", serviceCode)
 		return nil, errors.New("no service")
 	}
 	return

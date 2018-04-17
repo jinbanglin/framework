@@ -41,9 +41,9 @@ func NewInstancerDetailed(
 
 	instances, err := p.resolve(lookup)
 	if err == nil {
-		log.Infof("✨MOSS✨ |dnssrv |name=%s |instances=%v", name, len(instances))
+		log.Infof("MOSS |dnssrv |name=%s |instances=%v", name, len(instances))
 	} else {
-		log.Error("✨MOSS✨ |", name, err)
+		log.Error("MOSS |", name, err)
 	}
 	p.cache.Update(discovery.Event{Instances: instances, Err: err})
 

@@ -2,19 +2,24 @@ package payload
 
 import (
 	"github.com/gogo/protobuf/proto"
+	"github.com/jinbanglin/moss/log"
 	"github.com/json-iterator/go"
 )
 
 //only support json or protobuf
 type Codecer interface {
-	Marshal(v proto.Message) ([]byte, error)
+	Marshal(v proto.Message) ([]byte)
 	Unmarshal(payload []byte, message proto.Message) error
 }
 
 type JSONCodec struct{}
 
-func (JSONCodec) Marshal(v proto.Message) ([]byte, error) {
-	return jsoniter.Marshal(v)
+func (JSONCodec) Marshal(v proto.Message) ([]byte) {
+	b, err := jsoniter.Marshal(v)
+	if err != nil {
+		log.Errorf("MOSS |Marshal |err=%v", err)
+	}
+	return b
 }
 
 func (JSONCodec) Unmarshal(payload []byte, message proto.Message) error {
@@ -23,8 +28,12 @@ func (JSONCodec) Unmarshal(payload []byte, message proto.Message) error {
 
 type PROTOCodec struct{}
 
-func (PROTOCodec) Marshal(v proto.Message) ([]byte, error) {
-	return proto.Marshal(v)
+func (PROTOCodec) Marshal(v proto.Message) ([]byte) {
+	b, err := proto.Marshal(v)
+	if err != nil {
+		log.Errorf("MOSS |Marshal |err=%v", err)
+	}
+	return b
 }
 
 func (PROTOCodec) Unmarshal(payload []byte, message proto.Message) error {

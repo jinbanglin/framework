@@ -20,7 +20,7 @@ func RegisterSignal(sig os.Signal, process func()) error {
 	}
 	go func() {
 		msg := <-sigChan
-		log.Println("✨MOSS✨ |sig", msg, "received")
+		log.Println("MOSS |sig", msg, "received")
 		process()
 	}()
 	return nil
@@ -28,7 +28,7 @@ func RegisterSignal(sig os.Signal, process func()) error {
 
 func register(sig os.Signal) (chan os.Signal, error) {
 	if gSignal.Contains(sig) {
-		log.Fatal("✨MOSS✨ |signal", sig, "already registed")
+		log.Fatal("MOSS |signal", sig, "already registed")
 		return nil, SigAlreadyRegisted
 	}
 	gSignal.Add(sig)
@@ -45,7 +45,7 @@ func RegisterContinueSignal(sig os.Signal, process func()) error {
 	go func() {
 		for {
 			msg := <-sigChan
-			log.Println("✨MOSS✨ |sig", msg, "receveid")
+			log.Println("MOSS |sig", msg, "receveid")
 			process()
 		}
 	}()

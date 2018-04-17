@@ -56,20 +56,20 @@ func (c *ConfigManager) setupConfig(serviceName ServiceName, f ...func()) {
 		func() {
 			b, _ := jsoniter.Marshal(viper.Get("connection"))
 			if err := jsoniter.Unmarshal(b, &c.Connections); err != nil {
-				log.Error("✨MOSS✨ |json Unmarshal", err)
+				log.Error("MOSS |json Unmarshal", err)
 				return
 			}
 
 		}, func() {
 			b, _ := jsoniter.Marshal(viper.Get("etcdv3"))
 			if err := jsoniter.Unmarshal(b, c.EtcdEndPoints); err != nil {
-				log.Error("✨MOSS✨ |json Unmarshal", err)
+				log.Error("MOSS |json Unmarshal", err)
 				return
 			}
 		}, func() {
 			b, _ := jsoniter.Marshal(viper.Get("watch"))
 			if err := jsoniter.Unmarshal(b, &c.Watchers); err != nil {
-				log.Error("✨MOSS✨ |json Unmarshal", err)
+				log.Error("MOSS |json Unmarshal", err)
 				return
 			}
 		})

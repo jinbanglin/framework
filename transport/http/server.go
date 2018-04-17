@@ -6,6 +6,7 @@ import (
 
 	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/moss/payload"
 )
 
 type DecodeRequestFunc func(context.Context, *http.Request) (request interface{}, err error)
@@ -26,13 +27,14 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	request, err := s.dec(ctx, r)
 	if err != nil {
-		log.Errorf("✨MOSS✨ |dec |request=%v |err=%v",request,err)
+		log.Errorf("MOSS |dec |request=%v |err=%v", request, err)
 		s.errorEncoder(ctx, request, w)
 		return
 	}
 	response, err := s.e(ctx, request)
-	if err != nil {
-		log.Errorf("✨MOSS✨ |FROM |response=%v |err=%v",response,err)
+	if err != nil || response == nil {
+		log.Errorf("MOSS |FROM |response=%v |err=%v", response, err)
+		response = payload.MossPacket{MossMessage: payload.StatusText(payload.StatusInternalServerError)}
 		s.errorEncoder(ctx, response, w)
 		return
 	}
