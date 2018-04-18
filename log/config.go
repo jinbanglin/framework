@@ -23,13 +23,17 @@ const (
 	TB
 	PB
 )
+const (
+	OUT_STDOUT = 0x1f
+	OUT_FILE   = 0x8b
+)
 
 var (
 	coreDead    coreStatus = 2 //gLogger is dead
 	coreBlock   coreStatus = 0 //gLogger is block
 	coreRunning coreStatus = 1 //gLogger is running
 )
-var gSetOut = "file"
+var gSetOut = OUT_STDOUT
 var gSetMaxSize = 256 * MB
 var gSetBucketLen = 1024
 var gSetBufSize = 2 * MB
@@ -52,10 +56,17 @@ func setupConfig() {
 		gSetLevel = level(value)
 	}
 	if value := viper.GetInt("log.maxsize"); value > 0 {
-		gSetMaxSize = value*MB
+		gSetMaxSize = value * MB
 	}
 	if value := viper.GetString("log.out"); value != "" {
-		gSetOut = value
+		switch value {
+		case "stdout":
+			gSetOut = OUT_STDOUT
+		case "file":
+			gSetOut = OUT_FILE
+		default:
+			gSetOut = OUT_STDOUT
+		}
 	}
 	if value := viper.GetInt("log.interval"); value > 0 {
 		gSetPollerInterval = value
