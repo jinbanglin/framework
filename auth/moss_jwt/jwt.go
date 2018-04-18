@@ -1,15 +1,13 @@
 package moss_jwt
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-var MossJwtExpiresDelta int64 = 12
-//var MossJwtExpiresDelta int64 = 3600 * 12
+var MossJwtExpiresDelta int64 = 7200
 var JwtKey = []byte("8784e410796b279afea776524a6a464d7f9c153b")
 
 type Claims struct {
@@ -19,7 +17,6 @@ type Claims struct {
 }
 
 func genJwtClaims(userName, userId, audience string) Claims {
-	fmt.Println("----------------1----------")
 	now := time.Now()
 	return Claims{
 		UserName: userName,

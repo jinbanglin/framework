@@ -49,7 +49,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 			return moss_jwt.JwtKey, nil
 		})
 	if err != nil || !token.Valid {
-		log.Errorf("MOSS |token=%v", token)
+		log.Errorf("MOSS |token=%v |err=%v", token,err)
 		ctx = context.WithValue(ctx, payload.StatusUnauthorized, true)
 		return response, err
 	}
