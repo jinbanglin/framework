@@ -146,10 +146,11 @@ func print(buf *bytes.Buffer) {
 	switch gSetOut {
 	case "file":
 		gLogger.bucket <- buf
+	case "stdout":
+		fmt.Print(buf.String())
 	case "kafka": //todo send to kafka etc.
 	case "nsq": //todo send to kafka nsq etc.
 	}
-	fmt.Print(buf.String())
 }
 
 func Debugf(format string, msg ... interface{}) {

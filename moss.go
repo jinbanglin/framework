@@ -125,7 +125,7 @@ func (a *appServer) registerEtcdV3(serverAddr string, etcdAddress []string) {
 	etcdv3.DefaultEtcdV3Client(etcdAddress).Register(etcdv3.Service{
 		Key:   "/" + string(a.ServiceName) + "/" + a.ConfigManager.EtcdEndPoints.ServerId,
 		Value: serverAddr,
-		TTL:   etcdv3.NewTTLOption(3, 20),
+		TTL:   etcdv3.NewTTLOption(3, 10),
 	})
 	log.Infof("MOSS |register etcd key=%s", "/"+string(a.ServiceName)+"/"+a.ConfigManager.EtcdEndPoints.ServerId)
 	log.Info("MOSS |register etcd value", serverAddr)
