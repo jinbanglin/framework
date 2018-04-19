@@ -21,6 +21,10 @@ import (
 var gLogger *Logger
 
 func init() {
+	SetupMossLog()
+}
+
+func SetupMossLog() {
 	setupConfig()
 	y, m, d := time.Now().Date()
 	gLogger = &Logger{
@@ -35,7 +39,9 @@ func init() {
 		lock:        &sync.RWMutex{},
 		sigChan:     make(chan os.Signal),
 	}
-	go poller()
+	if gSetOut == OUT_FILE {
+		go poller()
+	}
 }
 
 func (l *Logger) loadCurLogFile() error {

@@ -76,6 +76,8 @@ func (c *ConfigManager) setupConfig(serviceName ServiceName, mode string, f ...f
 				log.Error("MOSS |json Unmarshal", err)
 				return
 			}
+		}, func() {
+			log.SetupMossLog()
 		})
 	c.fsnotify(f...)
 }

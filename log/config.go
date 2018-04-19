@@ -9,19 +9,19 @@ type coreStatus = uint32
 
 const (
 	_DEBUG    level = iota + 1
-	_INFO
-	_WARN
-	_ERR
-	_DISASTER
+	_INFO     
+	_WARN     
+	_ERR      
+	_DISASTER 
 )
 
 const (
 	B  = 1 << (10 * iota)
-	KB
-	MB
-	GB
-	TB
-	PB
+	KB 
+	MB 
+	GB 
+	TB 
+	PB 
 )
 const (
 	OUT_STDOUT = 0x1f
