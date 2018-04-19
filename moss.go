@@ -2,6 +2,7 @@ package moss
 
 import (
 	"crypto/tls"
+	"flag"
 	"fmt"
 	"net"
 	"net/http"
@@ -26,6 +27,7 @@ import (
 	"github.com/jinbanglin/moss/payload"
 )
 
+var mode = flag.String("m", "", "project mode prd or dev")
 var AppServer = &appServer{}
 
 type appServer struct {
@@ -35,8 +37,9 @@ type appServer struct {
 }
 
 func (a *appServer) SetupConfig(name ServiceName, f ...func()) {
+	flag.Parse()
 	AppServer = &appServer{ConfigManager: &ConfigManager{EtcdEndPoints: &EtcdV3{}}, ServiceName: name}
-	AppServer.setupConfig(name, f...)
+	AppServer.setupConfig(name, *mode,f...)
 }
 
 func (a *appServer) getServerAddr(connectionType ConnectionType) string {

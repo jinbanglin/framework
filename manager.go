@@ -50,8 +50,12 @@ func (c *ConfigManager) GetWatchNames() (result []string) {
 	return
 }
 
-func (c *ConfigManager) setupConfig(serviceName ServiceName, f ...func()) {
-	c.configFile = GetCurrentDirectory() + "/" + string(serviceName) +"."+viper.GetString("server.mode")+ ".toml"
+func (c *ConfigManager) setupConfig(serviceName ServiceName, mode string, f ...func()) {
+	if len(mode) > 0 {
+		c.configFile = GetCurrentDirectory() + "/" + string(serviceName) + "." + mode + ".toml"
+	} else {
+		c.configFile = GetCurrentDirectory() + "/" + string(serviceName) + ".toml"
+	}
 	f = append(f,
 		func() {
 			b, _ := jsoniter.Marshal(viper.Get("connection"))
