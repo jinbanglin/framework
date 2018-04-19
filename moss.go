@@ -17,6 +17,7 @@ import (
 	"github.com/jinbanglin/moss/log"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
+	"golang.org/x/net/http2"
 
 	"github.com/gorilla/mux"
 	"google.golang.org/grpc/reflection"
@@ -39,7 +40,7 @@ type appServer struct {
 func (a *appServer) SetupConfig(name ServiceName, f ...func()) {
 	flag.Parse()
 	AppServer = &appServer{ConfigManager: &ConfigManager{EtcdEndPoints: &EtcdV3{}}, ServiceName: name}
-	AppServer.setupConfig(name, *mode,f...)
+	AppServer.setupConfig(name, *mode, f...)
 }
 
 func (a *appServer) getServerAddr(connectionType ConnectionType) string {
@@ -61,7 +62,7 @@ func (a *appServer) GRPCServerStart() {
 	if err != nil {
 		panic(err)
 	}
-	log.Info("MOSS |start at:", addr)
+	log.Info("MOSS |start at", addr)
 	baseServer := grpc.NewServer()
 	payload.RegisterInvokingServer(baseServer, distributor.GGRPCServer.Scheduler)
 	reflection.Register(baseServer)
@@ -92,20 +93,20 @@ func (a *appServer) MakeGateway(r *mux.Router) {
 	gateway := distributor.NewHTTPGateway()
 	gateway.LoadBalancing(distributor.WatcherInstance())
 	a.AddFileSvc(r)
+	r.HandleFunc("/moss", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "🔥 MOSS 🔥")
+	})
 	go a.AddHTTPServer(r, gateway)
 	go a.AddTLSServer(r, gateway)
 }
 
 func (a *appServer) AddHTTPServer(r *mux.Router, gateway *distributor.HTTPGateway) {
-	r.HandleFunc("/moss", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "🔥 MOSS 🔥")
-	})
 	log.Info("MOSS |http start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
-	go log.Debug(http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r)))
+	log.Debug(http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r)))
 }
 
 func (a *appServer) AddTLSServer(r *mux.Router, gateway *distributor.HTTPGateway) {
-	log.Info("MOSS |https start at:", ":443")
+	log.Info("MOSS |https start at", ":443")
 	certManager := autocert.Manager{
 		Prompt: autocert.AcceptTOS,
 		Cache:  autocert.DirCache("certs"),
@@ -115,9 +116,13 @@ func (a *appServer) AddTLSServer(r *mux.Router, gateway *distributor.HTTPGateway
 		Handler: gateway.MakeHttpHandle(r),
 		TLSConfig: &tls.Config{
 			GetCertificate: certManager.GetCertificate,
+			Time:           time.Now,
+			NextProtos:     []string{http2.NextProtoTLS, "http/1.1"},
+			MinVersion:     tls.VersionTLS12,
 		},
 	}
-	go log.Debug(server.ListenAndServeTLS("", ""))
+	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	log.Debug(server.ListenAndServeTLS("", ""))
 }
 
 func (a *appServer) Run() {
