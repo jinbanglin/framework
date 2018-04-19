@@ -33,6 +33,7 @@ var (
 	coreBlock   coreStatus = 0 //gLogger is block
 	coreRunning coreStatus = 1 //gLogger is running
 )
+
 var gSetOut = OUT_STDOUT
 var gSetMaxSize = 256 * MB
 var gSetBucketLen = 1024
@@ -46,7 +47,7 @@ func setupConfig() {
 	if value := viper.GetInt("log.bucketlen"); value > 0 {
 		gSetBucketLen = value
 	}
-	if value := viper.GetString("log.filename"); value != "" {
+	if value := viper.GetString("log.linkname"); value != "" {
 		gSetFilename = value
 	}
 	if value := viper.GetString("log.filepath"); value != "" {
