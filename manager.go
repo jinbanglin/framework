@@ -108,3 +108,11 @@ func GetCurrentDirectory() string {
 	}
 	return strings.Replace(dir, "\\", "/", -1)
 }
+
+func GetPwd() string {
+	s,err:=os.Getwd()
+	if err!=nil{
+		log.Fatal(err)
+	}
+	return s
+}
