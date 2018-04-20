@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/segmentio/ksuid"
 )
 
 var MossJwtExpiresDelta int64 = 7200
@@ -24,11 +25,11 @@ func genJwtClaims(userName, userId, audience string) Claims {
 		StandardClaims: jwt.StandardClaims{
 			Audience:  audience,
 			ExpiresAt: now.Unix() + MossJwtExpiresDelta,
-			Id:        now.Format("150405") + userId,
+			Id:        ksuid.New().String() + userId,
 			IssuedAt:  now.Unix(),
-			Issuer:    "bixin_user",
+			Issuer:    "moss",
 			NotBefore: now.Unix(),
-			Subject:   userId + "_" + userName,
+			Subject:   userId + "." + userName,
 		},
 	}
 }
