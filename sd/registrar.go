@@ -1,4 +1,4 @@
-package discovery
+package sd
 
 // Registrar registers instance information to a service discovery system when
 // an instance becomes alive and healthy, and deregisters that information when

@@ -1,4 +1,4 @@
-package distributor
+package ipc
 
 import (
 	"github.com/gogo/protobuf/proto"

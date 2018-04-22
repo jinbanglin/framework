@@ -1,4 +1,4 @@
-package discovery
+package sd
 
 // Event represents a push notification generated from the underlying service discovery
 // implementation. It contains either a full set of available resource instances, or

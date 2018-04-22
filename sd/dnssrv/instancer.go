@@ -5,14 +5,14 @@ import (
 	"net"
 	"time"
 
-	"github.com/jinbanglin/moss/discovery"
+	"github.com/jinbanglin/moss/sd"
 	"github.com/jinbanglin/moss/log"
 )
 
 // Instancer yields instances from the named DNS SRV record. The name is
 // resolved on a fixed schedule. Priorities and weights are ignored.
 type Instancer struct {
-	cache *discovery.Cache
+	cache *sd.Cache
 	name  string
 	quit  chan struct{}
 }
@@ -34,7 +34,7 @@ func NewInstancerDetailed(
 	lookup Lookup,
 ) *Instancer {
 	p := &Instancer{
-		cache: discovery.NewCache(),
+		cache: sd.NewCache(),
 		name:  name,
 		quit:  make(chan struct{}),
 	}
@@ -45,7 +45,7 @@ func NewInstancerDetailed(
 	} else {
 		log.Error("MOSS |", name, err)
 	}
-	p.cache.Update(discovery.Event{Instances: instances, Err: err})
+	p.cache.Update(sd.Event{Instances: instances, Err: err})
 
 	go p.loop(refresh, lookup)
 	return p
@@ -63,10 +63,10 @@ func (s *Instancer) loop(t *time.Ticker, lookup Lookup) {
 		case <-t.C:
 			instances, err := s.resolve(lookup)
 			if err != nil {
-				s.cache.Update(discovery.Event{Err: err})
+				s.cache.Update(sd.Event{Err: err})
 				continue // don't replace potentially-good with bad
 			}
-			s.cache.Update(discovery.Event{Instances: instances})
+			s.cache.Update(sd.Event{Instances: instances})
 
 		case <-s.quit:
 			return
@@ -87,11 +87,11 @@ func (s *Instancer) resolve(lookup Lookup) ([]string, error) {
 }
 
 // Register implements Instancer.
-func (s *Instancer) Register(ch chan<- discovery.Event) {
+func (s *Instancer) Register(ch chan<- sd.Event) {
 	s.cache.Register(ch)
 }
 
 // Deregister implements Instancer.
-func (s *Instancer) Deregister(ch chan<- discovery.Event) {
+func (s *Instancer) Deregister(ch chan<- sd.Event) {
 	s.cache.Deregister(ch)
 }

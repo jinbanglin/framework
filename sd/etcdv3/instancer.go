@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/jinbanglin/moss/discovery"
+	"github.com/jinbanglin/moss/sd"
 	"github.com/jinbanglin/moss/log"
 )
 
 // Instancer yields instances stored in a certain etcd keyspace. Any kind of
 // change in that keyspace is watched and will update the Instancer's Instancers.
 type Instancer struct {
-	cache  *discovery.Cache
+	cache  *sd.Cache
 	client Client
 	prefix string
 	quitc  chan struct{}
@@ -23,7 +23,7 @@ func NewInstancer(c Client, prefix string) (*Instancer) {
 	s := &Instancer{
 		client: c,
 		prefix: prefix,
-		cache:  discovery.NewCache(),
+		cache:  sd.NewCache(),
 		quitc:  make(chan struct{}),
 	}
 
@@ -32,7 +32,7 @@ func NewInstancer(c Client, prefix string) (*Instancer) {
 		panic(err)
 	}
 	log.Infof("MOSS |prefix=%s |instances=%d", s.prefix, len(instances))
-	s.cache.Update(discovery.Event{Instances: instances, Err: err})
+	s.cache.Update(sd.Event{Instances: instances, Err: err})
 	go s.loop()
 	return s
 }
@@ -46,10 +46,10 @@ func (s *Instancer) loop() {
 			instances, err := s.client.GetEntries(s.prefix)
 			if err != nil {
 				log.Errorf("MOSS |Etcdv3 |loop |msg=%s |err=%v", "failed to retrieve entries", err)
-				s.cache.Update(discovery.Event{Err: err})
+				s.cache.Update(sd.Event{Err: err})
 				continue
 			}
-			s.cache.Update(discovery.Event{Instances: instances})
+			s.cache.Update(sd.Event{Instances: instances})
 
 		case <-s.quitc:
 			return
@@ -63,12 +63,12 @@ func (s *Instancer) Stop() {
 }
 
 // Register implements Instancer.
-func (s *Instancer) Register(ch chan<- discovery.Event) {
+func (s *Instancer) Register(ch chan<- sd.Event) {
 	s.cache.Register(ch)
 }
 
 // Deregister implements Instancer.
-func (s *Instancer) Deregister(ch chan<- discovery.Event) {
+func (s *Instancer) Deregister(ch chan<- sd.Event) {
 	s.cache.Deregister(ch)
 }
 

@@ -1,16 +1,16 @@
-package distributor
+package ipc
 
 import (
 	"context"
 	"io"
 	"time"
 
-	"github.com/jinbanglin/moss/discovery"
-	"github.com/jinbanglin/moss/discovery/etcdv3"
-	"github.com/jinbanglin/moss/discovery/lb"
 	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/payload"
+	"github.com/jinbanglin/moss/sd"
+	"github.com/jinbanglin/moss/sd/etcdv3"
+	"github.com/jinbanglin/moss/sd/lb"
 	"google.golang.org/grpc"
 )
 
@@ -22,8 +22,8 @@ type Watcher struct {
 
 type WatcherEndpoint struct {
 	etcdInstancer *etcdv3.Instancer
-	factory       discovery.Factory
-	sdEndPointer  discovery.Endpointer
+	factory       sd.Factory
+	sdEndPointer  sd.Endpointer
 	lbRoundRobin  lb.Balancer
 	retry         endpoint.Endpoint
 	endpoint      endpoint.Endpoint
@@ -54,7 +54,7 @@ func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *Watche
 			return NewGRPCClient(conn), conn, nil
 		}
 	}
-	watcher.sdEndPointer = discovery.NewEndpointer(watcher.etcdInstancer, watcher.factory)
+	watcher.sdEndPointer = sd.NewEndpointer(watcher.etcdInstancer, watcher.factory)
 	watcher.lbRoundRobin = lb.NewRoundRobin(watcher.sdEndPointer)
 	watcher.retry = lb.Retry(3, time.Second*10, watcher.lbRoundRobin)
 	watcher.endpoint = watcher.retry

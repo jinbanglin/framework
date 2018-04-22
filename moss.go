@@ -12,8 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/jinbanglin/moss/discovery/etcdv3"
-	"github.com/jinbanglin/moss/distributor"
+	"github.com/jinbanglin/moss/sd/etcdv3"
+	"github.com/jinbanglin/moss/ipc"
 	"github.com/jinbanglin/moss/log"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
@@ -56,7 +56,7 @@ func (a *appServer) GRPCServerStart() {
 	addr := a.getServerAddr(CONNECTION_TYPE_GRPC)
 	a.registerEtcdV3(addr, a.EtcdEndPoints.EtcdEndpoints)
 	if len(a.Watchers) > 0 {
-		distributor.WatcherInstance().Watch(a.GetWatchNames(), a.EtcdEndPoints.EtcdEndpoints)
+		ipc.WatcherInstance().Watch(a.GetWatchNames(), a.EtcdEndPoints.EtcdEndpoints)
 	}
 	grpcListener, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -64,7 +64,7 @@ func (a *appServer) GRPCServerStart() {
 	}
 	log.Info("MOSS |start at", addr)
 	baseServer := grpc.NewServer()
-	payload.RegisterInvokingServer(baseServer, distributor.GGRPCServer.Scheduler)
+	payload.RegisterInvokingServer(baseServer, ipc.GGRPCServer.Scheduler)
 	reflection.Register(baseServer)
 	if err = baseServer.Serve(grpcListener); err != nil {
 		panic(err)
@@ -89,9 +89,9 @@ func (a *appServer) AddFileSvc(r *mux.Router) {
 }
 
 func (a *appServer) MakeGateway(r *mux.Router) {
-	distributor.WatcherInstance().Watch(a.GetWatchNames(), a.EtcdEndPoints.EtcdEndpoints)
-	gateway := distributor.NewHTTPGateway()
-	gateway.LoadBalancing(distributor.WatcherInstance())
+	ipc.WatcherInstance().Watch(a.GetWatchNames(), a.EtcdEndPoints.EtcdEndpoints)
+	gateway := ipc.NewHTTPGateway()
+	gateway.LoadBalancing(ipc.WatcherInstance())
 	a.AddFileSvc(r)
 	r.HandleFunc("/moss", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "🔥 MOSS 🔥")
@@ -100,12 +100,12 @@ func (a *appServer) MakeGateway(r *mux.Router) {
 	go a.AddTLSServer(r, gateway)
 }
 
-func (a *appServer) AddHTTPServer(r *mux.Router, gateway *distributor.HTTPGateway) {
+func (a *appServer) AddHTTPServer(r *mux.Router, gateway *ipc.HTTPGateway) {
 	log.Info("MOSS |http start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
 	log.Debug(http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r)))
 }
 
-func (a *appServer) AddTLSServer(r *mux.Router, gateway *distributor.HTTPGateway) {
+func (a *appServer) AddTLSServer(r *mux.Router, gateway *ipc.HTTPGateway) {
 	log.Info("MOSS |https start at", ":443")
 	certManager := autocert.Manager{
 		Prompt: autocert.AcceptTOS,
@@ -151,6 +151,6 @@ func (a *appServer) Stop(timeout time.Duration, f ...func()) {
 		}
 		//todo free or else
 	}
-	distributor.RegisterContinueSignal(syscall.SIGTERM, process)
-	distributor.RegisterContinueSignal(syscall.SIGINT, process)
+	ipc.RegisterContinueSignal(syscall.SIGTERM, process)
+	ipc.RegisterContinueSignal(syscall.SIGINT, process)
 }
