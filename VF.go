@@ -1,3 +1,3 @@
 package moss
-//some strong VF
+//file strong VF
 type VF func()

@@ -12,9 +12,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/jinbanglin/moss/sd/etcdv3"
 	"github.com/jinbanglin/moss/ipc"
 	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/moss/sd/etcdv3"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 	"golang.org/x/net/http2"
