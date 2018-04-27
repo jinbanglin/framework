@@ -49,7 +49,7 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 			return moss_jwt.JwtKey, nil
 		})
 	if err != nil || !token.Valid {
-		log.Errorf("MOSS |token=%v |err=%v", token,err)
+		log.Errorf("MOSS |token=%v |err=%v", token, err)
 		ctx = context.WithValue(ctx, payload.StatusUnauthorized, true)
 		return response, err
 	}
@@ -68,16 +68,16 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 		log.Errorf("MOSS |err=%v ", err)
 		return response, err
 	}
-	response.UserId = token.Claims.(jwtgo.MapClaims)["UserId"].(string)
+	response.MossMetadata = map[string]string{"client_ip": r.RemoteAddr}
+	response.MossMetadata["user_id"] = token.Claims.(jwtgo.MapClaims)["user_id"].(string)
 	response.ServiceCode = uint32(serviceCode)
 	response.Payload = b
-	response.ClientIp = r.RemoteAddr
 	response.MossMessage = payload.StatusText(payload.StatusOK)
 	return response, nil
 }
 
 func encodeHTTPGenericResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
-	log.Info(" |FROM |response=",response)
+	log.Info(" |FROM |response=", response)
 	w.Write(response.(*payload.MossPacket).Payload)
 	return nil
 }

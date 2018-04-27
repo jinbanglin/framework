@@ -35,8 +35,8 @@ func (s *GPRCInvoking) Invoking(ctx context2.Context, request *payload.MossPacke
 		log.Errorf("MOSS |request=%v |err=%v", request, err)
 		return response, nil
 	}
-	ctx = context2.WithValue(ctx, "user_id", request.UserId)
-	ctx = context2.WithValue(ctx, "client_ip", request.ClientIp)
+	ctx = context2.WithValue(ctx, "user_id", request.MossMetadata["user_id"])
+	ctx = context2.WithValue(ctx, "client_ip", request.MossMetadata["client_ip"])
 	res, err := schedulerHandler.handler.ServeGRPC(ctx, req)
 	response.Payload = payload.GetCodec(request.ServiceCode).Marshal(res.(proto.Message))
 	response.ServiceCode = request.ServiceCode

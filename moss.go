@@ -101,7 +101,7 @@ func (a *appServer) MakeGateway(r *mux.Router) {
 }
 
 func (a *appServer) AddHTTPServer(r *mux.Router, gateway *ipc.HTTPGateway) {
-	log.Info("MOSS |http start at:", a.getServerAddr(CONNECTION_TYPE_HTTP))
+	log.Info("MOSS |http start at", a.getServerAddr(CONNECTION_TYPE_HTTP))
 	log.Debug(http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r)))
 }
 

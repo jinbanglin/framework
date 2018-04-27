@@ -8,12 +8,14 @@ import (
 
 var JwtKey = []byte("")
 
-type Claims struct {
-	Extra string
+type MossClaims struct {
+	UserId string
+	Client string
+	AppId  string
 	jwt.StandardClaims
 }
 
-func NewJwtToken(claims Claims, jwtKey []byte) (string, error) {
+func NewJwtToken(claims jwt.Claims, jwtKey []byte) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(jwtKey)
 }
 

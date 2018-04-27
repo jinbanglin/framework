@@ -67,9 +67,7 @@ func (m *MossPacket) Validate() error {
 		}
 	}
 
-	// no validation rules for UserId
-
-	// no validation rules for ClientIp
+	// no validation rules for MossMetadata
 
 	return nil
 }
