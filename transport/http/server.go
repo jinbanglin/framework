@@ -54,15 +54,39 @@ func ListenAndServe(address string, handler func(*fasthttp.RequestCtx)) {
 	hdr := func(listener net.Listener) {
 		defer listener.Close()
 		server := &fasthttp.Server{
-			Handler: handler,
-			ReadTimeout: 60 * time.Second,
-			DisableKeepalive:true,
+			Handler:          handler,
+			ReadTimeout:      60 * time.Second,
+			DisableKeepalive: true,
 		}
 		server.Serve(listener)
 	}
 
 	for i := 0; i < runtime.NumCPU(); i++ {
 		l, err := reuseport.Listen("tcp4", address)
+		if err != nil {
+			panic(err)
+		}
+		if (i + 1 ) == runtime.NumCPU() {
+			hdr(l)
+		} else {
+			go hdr(l)
+		}
+	}
+}
+
+func ListenAndTLSServe(certFile, keyFile string, handler func(*fasthttp.RequestCtx)) {
+	hdr := func(listener net.Listener) {
+		defer listener.Close()
+		server := &fasthttp.Server{
+			Handler:          handler,
+			ReadTimeout:      60 * time.Second,
+			DisableKeepalive: true,
+		}
+		server.ServeTLS(listener,certFile, keyFile)
+	}
+
+	for i := 0; i < runtime.NumCPU(); i++ {
+		l, err := reuseport.Listen("tcp4", ":443")
 		if err != nil {
 			panic(err)
 		}
