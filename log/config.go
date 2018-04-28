@@ -1,6 +1,8 @@
 package log
 
 import (
+	"os"
+
 	"github.com/spf13/viper"
 )
 
@@ -9,19 +11,19 @@ type coreStatus = uint32
 
 const (
 	_DEBUG    level = iota + 1
-	_INFO     
-	_WARN     
-	_ERR      
-	_DISASTER 
+	_INFO
+	_WARN
+	_ERR
+	_DISASTER
 )
 
 const (
 	B  = 1 << (10 * iota)
-	KB 
-	MB 
-	GB 
-	TB 
-	PB 
+	KB
+	MB
+	GB
+	TB
+	PB
 )
 const (
 	OUT_STDOUT = 0x1f
@@ -51,6 +53,11 @@ func setupConfig() {
 		gSetFilename = value
 	}
 	if value := viper.GetString("log.filepath"); value != "" {
+		if !pathIsExist(value) {
+			if err := os.Mkdir(value, os.ModePerm); err != nil {
+				panic(err)
+			}
+		}
 		gSetFilePath = value
 	}
 	if value := viper.GetInt("log.level"); value > 0 {

@@ -2,11 +2,16 @@ package http
 
 import (
 	"context"
+	"net"
 	"net/http"
+	"runtime"
+	"time"
 
 	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/payload"
+	"github.com/kavu/go_reuseport"
+	"github.com/valyala/fasthttp"
 )
 
 type DecodeRequestFunc func(context.Context, *http.Request) (request interface{}, err error)
@@ -44,3 +49,27 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 type ErrorEncoder func(ctx context.Context, response interface{}, w http.ResponseWriter)
+
+func ListenAndServe(address string, handler func(*fasthttp.RequestCtx)) {
+	hdr := func(listener net.Listener) {
+		defer listener.Close()
+		server := &fasthttp.Server{
+			Handler: handler,
+			ReadTimeout: 60 * time.Second,
+			DisableKeepalive:true,
+		}
+		server.Serve(listener)
+	}
+
+	for i := 0; i < runtime.NumCPU(); i++ {
+		l, err := reuseport.Listen("tcp4", address)
+		if err != nil {
+			panic(err)
+		}
+		if (i + 1 ) == runtime.NumCPU() {
+			hdr(l)
+		} else {
+			go hdr(l)
+		}
+	}
+}

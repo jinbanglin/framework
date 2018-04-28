@@ -64,9 +64,10 @@ func decodeHTTPInvokeRequest(ctx context.Context, r *http.Request) (interface{},
 		return response, err
 	}
 	b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
+	if err != nil || len(b) < 1 {
 		log.Errorf("MOSS |err=%v ", err)
-		return response, err
+		response.MossMessage = payload.StatusText(payload.StatusBadRequest)
+		return response, payload.ErrInvalidLengthPayload
 	}
 	response.MossMetadata = map[string]string{"client_ip": r.RemoteAddr}
 	response.MossMetadata["user_id"] = token.Claims.(jwtgo.MapClaims)["user_id"].(string)

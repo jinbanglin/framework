@@ -15,8 +15,10 @@ import (
 	"github.com/jinbanglin/moss/ipc"
 	"github.com/jinbanglin/moss/log"
 	"github.com/jinbanglin/moss/sd/etcdv3"
+	mosshttp "github.com/jinbanglin/moss/transport/http"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
+	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"golang.org/x/net/http2"
 
 	"github.com/gorilla/mux"
@@ -102,7 +104,8 @@ func (a *appServer) MakeGateway(r *mux.Router) {
 
 func (a *appServer) AddHTTPServer(r *mux.Router, gateway *ipc.HTTPGateway) {
 	log.Info("MOSS |http start at", a.getServerAddr(CONNECTION_TYPE_HTTP))
-	log.Debug(http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r)))
+	//log.Debug(http.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), gateway.MakeHttpHandle(r)))
+	mosshttp.ListenAndServe(a.getServerAddr(CONNECTION_TYPE_HTTP), fasthttpadaptor.NewFastHTTPHandler(gateway.MakeHttpHandle(r)))
 }
 
 func (a *appServer) AddTLSServer(r *mux.Router, gateway *ipc.HTTPGateway) {
