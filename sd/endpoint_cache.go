@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/jinbanglin/moss/endpoint"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 )
 
 // endpointCache collects the most recent set of instances from a service discovery

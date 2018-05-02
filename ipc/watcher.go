@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jinbanglin/moss/endpoint"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 	"github.com/jinbanglin/moss/payload"
 	"github.com/jinbanglin/moss/sd"
 	"github.com/jinbanglin/moss/sd/etcdv3"

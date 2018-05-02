@@ -5,7 +5,7 @@ import (
 	"reflect"
 
 	"github.com/jinbanglin/moss/endpoint"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 	transportgrpc "github.com/jinbanglin/moss/transport/grpc"
 
 	"github.com/gogo/protobuf/proto"

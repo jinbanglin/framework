@@ -111,7 +111,7 @@ func (m *MossMessage) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Code
+	// no validation rules for PrepID
 
 	// no validation rules for Msg
 

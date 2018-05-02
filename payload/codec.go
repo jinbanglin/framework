@@ -2,7 +2,7 @@ package payload
 
 import (
 	"github.com/gogo/protobuf/proto"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 	"github.com/json-iterator/go"
 )
 

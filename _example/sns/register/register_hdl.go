@@ -2,7 +2,7 @@ package register
 
 import (
 	"github.com/jinbanglin/moss/_example/pb"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 
 	"context"
 )

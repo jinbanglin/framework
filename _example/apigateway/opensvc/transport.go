@@ -14,7 +14,7 @@ import (
 	"github.com/json-iterator/go"
 	"github.com/spf13/viper"
 
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 
 	"github.com/gorilla/mux"
 	"github.com/jinbanglin/moss/payload"

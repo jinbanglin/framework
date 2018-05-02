@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/jinbanglin/moss/endpoint"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 	mosshttp "github.com/jinbanglin/moss/transport/http"
 
 	jwtgo "github.com/dgrijalva/jwt-go"

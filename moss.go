@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/jinbanglin/moss/ipc"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 	"github.com/jinbanglin/moss/sd/etcdv3"
 	mosshttp "github.com/jinbanglin/moss/transport/http"
 	"github.com/spf13/afero"

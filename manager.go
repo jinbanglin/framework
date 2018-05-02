@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 	"github.com/json-iterator/go"
 	"github.com/spf13/viper"
 )

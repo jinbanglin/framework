@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 )
 
 const minHeartBeatTime = 500 * time.Millisecond

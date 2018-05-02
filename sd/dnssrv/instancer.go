@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jinbanglin/moss/sd"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 )
 
 // Instancer yields instances from the named DNS SRV record. The name is

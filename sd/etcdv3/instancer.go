@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jinbanglin/moss/sd"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 )
 
 // Instancer yields instances stored in a certain etcd keyspace. Any kind of

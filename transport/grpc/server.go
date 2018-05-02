@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"github.com/jinbanglin/moss/endpoint"
-	"github.com/jinbanglin/moss/log"
+	"github.com/jinbanglin/log"
 
 	"context"
 )
