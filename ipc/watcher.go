@@ -2,8 +2,6 @@ package ipc
 
 import (
 	"context"
-	"io"
-	"time"
 
 	"github.com/jinbanglin/moss/endpoint"
 	"github.com/jinbanglin/log"
@@ -12,6 +10,8 @@ import (
 	"github.com/jinbanglin/moss/sd/etcdv3"
 	"github.com/jinbanglin/moss/sd/lb"
 	"google.golang.org/grpc"
+	"time"
+	"io"
 )
 
 var gWatcher *Watcher
@@ -21,12 +21,12 @@ type Watcher struct {
 }
 
 type WatcherEndpoint struct {
-	etcdInstancer *etcdv3.Instancer
-	factory       sd.Factory
-	sdEndPointer  sd.Endpointer
-	lbRoundRobin  lb.Balancer
-	retry         endpoint.Endpoint
-	endpoint      endpoint.Endpoint
+	etcd         *etcdv3.Instancer
+	factory      sd.Factory
+	sdEndPointer sd.Endpointer
+	lbRoundRobin lb.Balancer
+	retry        endpoint.Endpoint
+	endpoint     endpoint.Endpoint
 }
 
 func WatcherInstance() *Watcher {
@@ -45,18 +45,18 @@ func (w *Watcher) Watch(services, etcdAddress []string) {
 
 func newWatchEndpoint(serviceName string, etcdAddress []string) (watcher *WatcherEndpoint) {
 	watcher = &WatcherEndpoint{}
-	watcher.etcdInstancer = etcdv3.NewInstancer(etcdv3.DefaultEtcdV3Client(etcdAddress), "/"+string(serviceName))
+	watcher.etcd = etcdv3.NewInstancer(etcdv3.DefaultEtcdV3Client(etcdAddress), "/"+string(serviceName))
 	watcher.factory = func(instance string) (endpoint.Endpoint, io.Closer, error) {
-		if conn, err := grpc.Dial(instance, grpc.WithInsecure()); err != nil {
+		if conn, err := grpc.Dial(instance, grpc.WithInsecure(), grpc.WithBlock()); err != nil {
 			log.Error("MOSS |err=", err)
 			return nil, nil, err
 		} else {
 			return NewGRPCClient(conn), conn, nil
 		}
 	}
-	watcher.sdEndPointer = sd.NewEndpointer(watcher.etcdInstancer, watcher.factory)
+	watcher.sdEndPointer = sd.NewEndpointer(watcher.etcd, watcher.factory)
 	watcher.lbRoundRobin = lb.NewRoundRobin(watcher.sdEndPointer)
-	watcher.retry = lb.Retry(3, time.Second*10, watcher.lbRoundRobin)
+	watcher.retry = lb.Retry(3, time.Millisecond*500, watcher.lbRoundRobin)
 	watcher.endpoint = watcher.retry
 	return
 }
